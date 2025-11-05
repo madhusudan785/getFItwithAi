@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.dietplanner.com.example.dietplanner.util.SetStatusBarColor
 import com.example.dietplanner.ui.theme.DietPlannerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,6 +28,7 @@ fun FeedbackScreen(
     onRegenerate: () -> Unit,
     onBack: () -> Unit
 ) {
+
     Log.d("FeedbackScreen", "Screen loaded")
 
     var isVisible by remember { mutableStateOf(false) }

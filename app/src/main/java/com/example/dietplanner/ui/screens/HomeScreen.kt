@@ -31,6 +31,9 @@ import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxState
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.material3.SwipeToDismissBoxValue
+import com.example.dietplanner.com.example.dietplanner.util.EdgeToEdgeScaffold
+import com.example.dietplanner.com.example.dietplanner.util.SetStatusBarColor
+
 /**
  * HOME SCREEN - Main landing page of the app
  *
@@ -50,185 +53,193 @@ fun HomeScreen(
     onFabClick: () -> Unit,
     onDeletePlan: (DietPlanEntity) -> Unit
 ) {
+
     Log.d("HomeScreen", "=== Home Screen Loaded ===")
     Log.d("HomeScreen", "Displaying ${savedPlans.size} saved plans")
 
     val dateFormatter = remember { SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()) }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Text(
-                            "🥗",
-                            style = MaterialTheme.typography.headlineMedium
-                        )
-                        Text(
-                            "Diet Planner",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 22.sp
-                        )
-                    }
-                },
-                actions = {
-                    // Profile Button
-                    IconButton(
-                        onClick = {
-                            Log.d("HomeScreen", "Profile button clicked")
-                            onProfileClick()
-                        }
-                    ) {
-                        Icon(
-                            Icons.Default.Person,
-                            contentDescription = "Profile",
-                            tint = MaterialTheme.colorScheme.onPrimaryContainer
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-            )
-        },
-        floatingActionButton = {
-            // Floating Action Button for Reminders
-            ExtendedFloatingActionButton(
-                onClick = {
-                    Log.d("HomeScreen", "FAB clicked - Navigate to reminders")
-                    onFabClick()
-                },
-                icon = {
-                    Icon(
-                        Icons.Default.Notifications,
-                        contentDescription = "Reminders"
-                    )
-                },
-                text = { Text("Reminders", fontWeight = FontWeight.SemiBold) },
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-                elevation = FloatingActionButtonDefaults.elevation(
-                    defaultElevation = 6.dp,
-                    pressedElevation = 8.dp
-                )
-            )
-        }
-    ) { padding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            // Top spacing
-            item {
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-
-            // Welcome Card
-            item {
-                WelcomeCard(
-                    plansCount = savedPlans.size,
-                    onCreateNew = onProfileClick
-                )
-            }
-
-            // Show saved plans or empty state
-            if (savedPlans.isNotEmpty()) {
-                // Saved Plans Header
-                item {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            "Your Diet Plans",
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-
-                        Badge(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer
+    EdgeToEdgeScaffold(statusBarColor = MaterialTheme.colorScheme.primaryContainer) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            Text("${savedPlans.size}")
-                        }
-                    }
-                }
-
-                // Saved Plans List
-                items(savedPlans, key = { it.id }) { plan ->
-
-                    val dismissState = rememberSwipeToDismissBoxState(
-                        confirmValueChange = { value ->
-                            if (value == SwipeToDismissBoxValue.EndToStart || value == SwipeToDismissBoxValue.StartToEnd) {
-                                Log.d("HomeScreen", "Deleting plan: ${plan.name}")
-                                onDeletePlan(plan)
-                                true
-                            } else false
-                        }
-                    )
-
-                    SwipeToDismissBox(
-                        state = dismissState,
-                        backgroundContent = {
-                            val color = when (dismissState.currentValue) {
-                                SwipeToDismissBoxValue.StartToEnd, SwipeToDismissBoxValue.EndToStart ->
-                                    MaterialTheme.colorScheme.errorContainer
-                                else -> MaterialTheme.colorScheme.surface
-                            }
-
-                            val alignment = when (dismissState.currentValue) {
-                                SwipeToDismissBoxValue.StartToEnd -> Alignment.CenterStart
-                                SwipeToDismissBoxValue.EndToStart -> Alignment.CenterEnd
-                                else -> Alignment.Center
-                            }
-
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(color)
-                                    .padding(horizontal = 20.dp),
-                                contentAlignment = alignment
-                            ) {
-                                Icon(
-                                    Icons.Default.Delete,
-                                    contentDescription = "Delete",
-                                    tint = MaterialTheme.colorScheme.onErrorContainer
-                                )
-                            }
-                        },
-                        content = {
-                            DietPlanCard(
-                                plan = plan,
-                                dateFormatter = dateFormatter,
-                                onClick = {
-                                    Log.d("HomeScreen", "Plan clicked: ID=${plan.id}, Name=${plan.name}")
-                                    onPlanClick(plan.id)
-                                }
+                            Text(
+                                "🥗",
+                                style = MaterialTheme.typography.headlineMedium
+                            )
+                            Text(
+                                "Diet Planner",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 22.sp
                             )
                         }
+                    },
+                    actions = {
+                        // Profile Button
+                        IconButton(
+                            onClick = {
+                                Log.d("HomeScreen", "Profile button clicked")
+                                onProfileClick()
+                            }
+                        ) {
+                            Icon(
+                                Icons.Default.Person,
+                                contentDescription = "Profile",
+                                tint = MaterialTheme.colorScheme.onPrimaryContainer
+                            )
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                )
+            },
+            floatingActionButton = {
+                // Floating Action Button for Reminders
+                ExtendedFloatingActionButton(
+                    onClick = {
+                        Log.d("HomeScreen", "FAB clicked - Navigate to reminders")
+                        onFabClick()
+                    },
+                    icon = {
+                        Icon(
+                            Icons.Default.Notifications,
+                            contentDescription = "Reminders"
+                        )
+                    },
+                    text = { Text("Reminders", fontWeight = FontWeight.SemiBold) },
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    elevation = FloatingActionButtonDefaults.elevation(
+                        defaultElevation = 6.dp,
+                        pressedElevation = 8.dp
+                    )
+                )
+            },
+
+            ) { padding ->
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(horizontal = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                // Top spacing
+                item {
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+
+                // Welcome Card
+                item {
+                    WelcomeCard(
+                        plansCount = savedPlans.size,
+                        onCreateNew = onProfileClick
                     )
                 }
 
-            } else {
-                // Empty State with Dummy Plans
-                item {
-                    EmptyStateWithDummyPlans(onCreateNew = onProfileClick)
-                }
-            }
+                // Show saved plans or empty state
+                if (savedPlans.isNotEmpty()) {
+                    // Saved Plans Header
+                    item {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                "Your Diet Plans",
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
 
-            // Bottom spacing for FAB
-            item {
-                Spacer(modifier = Modifier.height(80.dp))
+                            Badge(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer
+                            ) {
+                                Text("${savedPlans.size}")
+                            }
+                        }
+                    }
+
+                    // Saved Plans List
+                    items(savedPlans, key = { it.id }) { plan ->
+
+                        val dismissState = rememberSwipeToDismissBoxState(
+                            confirmValueChange = { value ->
+                                if (value == SwipeToDismissBoxValue.EndToStart || value == SwipeToDismissBoxValue.StartToEnd) {
+                                    Log.d("HomeScreen", "Deleting plan: ${plan.name}")
+                                    onDeletePlan(plan)
+                                    true
+                                } else false
+                            }
+                        )
+
+                        SwipeToDismissBox(
+                            state = dismissState,
+                            backgroundContent = {
+                                val color = when (dismissState.currentValue) {
+                                    SwipeToDismissBoxValue.StartToEnd, SwipeToDismissBoxValue.EndToStart ->
+                                        MaterialTheme.colorScheme.errorContainer
+
+                                    else -> MaterialTheme.colorScheme.surface
+                                }
+
+                                val alignment = when (dismissState.currentValue) {
+                                    SwipeToDismissBoxValue.StartToEnd -> Alignment.CenterStart
+                                    SwipeToDismissBoxValue.EndToStart -> Alignment.CenterEnd
+                                    else -> Alignment.Center
+                                }
+
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .background(color)
+                                        .padding(horizontal = 20.dp),
+                                    contentAlignment = alignment
+                                ) {
+                                    Icon(
+                                        Icons.Default.Delete,
+                                        contentDescription = "Delete",
+                                        tint = MaterialTheme.colorScheme.onErrorContainer
+                                    )
+                                }
+                            },
+                            content = {
+                                DietPlanCard(
+                                    plan = plan,
+                                    dateFormatter = dateFormatter,
+                                    onClick = {
+                                        Log.d(
+                                            "HomeScreen",
+                                            "Plan clicked: ID=${plan.id}, Name=${plan.name}"
+                                        )
+                                        onPlanClick(plan.id)
+                                    }
+                                )
+                            }
+                        )
+                    }
+
+                } else {
+                    // Empty State with Dummy Plans
+                    item {
+                        EmptyStateWithDummyPlans(onCreateNew = onProfileClick)
+                    }
+                }
+
+                // Bottom spacing for FAB
+                item {
+                    Spacer(modifier = Modifier.height(80.dp))
+                }
             }
         }
     }

@@ -22,6 +22,7 @@ class UserPreferencesManager(private val context: Context) {
 
     val isFirstLaunch: Flow<Boolean> = context.dataStore.data
         .map { prefs -> prefs[FIRST_LAUNCH_KEY] ?: false }
+
     private object Keys {
         val HEIGHT = floatPreferencesKey("height")
         val WEIGHT = floatPreferencesKey("weight")

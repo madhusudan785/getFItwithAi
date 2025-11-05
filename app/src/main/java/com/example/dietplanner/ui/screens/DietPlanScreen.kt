@@ -15,6 +15,8 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.dietplanner.com.example.dietplanner.util.EdgeToEdgeScaffold
+import com.example.dietplanner.com.example.dietplanner.util.SetStatusBarColor
 import com.example.dietplanner.data.model.DietPlanState
 import com.example.dietplanner.ui.theme.DietPlannerTheme
 
@@ -26,6 +28,7 @@ fun DietPlanScreen(
     onModify: () -> Unit,
     onBack: () -> Unit
 ) {
+
     val scrollState = rememberScrollState()
 
     LaunchedEffect(state) {
@@ -35,221 +38,222 @@ fun DietPlanScreen(
         }
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        "Your Diet Plan",
-                        fontWeight = FontWeight.Bold
+
+    EdgeToEdgeScaffold(statusBarColor = MaterialTheme.colorScheme.primaryContainer) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text("Your Diet Plan", fontWeight = FontWeight.Bold) },
+                    navigationIcon = {
+                        IconButton(onClick = {
+                            Log.d("DietPlanScreen", "Back clicked")
+                            onBack()
+                        }) {
+                            Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                     )
-                },
-                navigationIcon = {
-                    IconButton(onClick = {
-                        Log.d("DietPlanScreen", "Back clicked")
-                        onBack()
-                    }) {
-                        Icon(Icons.Default.ArrowBack, "Back")
-                        onBack()
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 )
-            )
-        }
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(16.dp)
-        ) {
-            Card(
+            }
+        ) { padding ->
+            Column(
                 modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant
-                ),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(16.dp)
             ) {
-                Box(
+                Card(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp)
+                        .weight(1f)
+                        .fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    ),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                 ) {
-                    when (state) {
-                        is DietPlanState.Idle -> {
-                            Column(
-                                modifier = Modifier.fillMaxSize(),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                Text(
-                                    "⏳",
-                                    style = MaterialTheme.typography.displayLarge
-                                )
-                                Spacer(modifier = Modifier.height(16.dp))
-                                Text(
-                                    "Waiting to generate diet plan...",
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                        }
-                        is DietPlanState.Loading -> {
-                            Column(
-                                modifier = Modifier.fillMaxSize(),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.size(60.dp),
-                                    strokeWidth = 6.dp
-                                )
-                                Spacer(modifier = Modifier.height(24.dp))
-                                Text(
-                                    "Connecting to AI...",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.SemiBold
-                                )
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Text(
-                                    "Creating your personalized diet plan",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                        }
-                        is DietPlanState.Streaming -> {
-                            Column(
-                                modifier = Modifier.verticalScroll(scrollState)
-                            ) {
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                    verticalAlignment = Alignment.CenterVertically
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp)
+                    ) {
+                        when (state) {
+                            is DietPlanState.Idle -> {
+                                Column(
+                                    modifier = Modifier.fillMaxSize(),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
                                 ) {
-                                    Icon(
-                                        Icons.Default.Star,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.primary
-                                    )
                                     Text(
-                                        "Generating...",
-                                        style = MaterialTheme.typography.labelMedium,
-                                        color = MaterialTheme.colorScheme.primary,
-                                        fontWeight = FontWeight.Bold
+                                        "⏳",
+                                        style = MaterialTheme.typography.displayLarge
+                                    )
+                                    Spacer(modifier = Modifier.height(16.dp))
+                                    Text(
+                                        "Waiting to generate diet plan...",
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
-                                Divider(modifier = Modifier.padding(vertical = 12.dp))
-                                Text(
-                                    text = state.content,
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    lineHeight = MaterialTheme.typography.bodyLarge.lineHeight * 1.5
-                                )
-                                TypingIndicator()
                             }
-                        }
-                        is DietPlanState.Success -> {
-                            Column(
-                                modifier = Modifier.verticalScroll(scrollState)
-                            ) {
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                    verticalAlignment = Alignment.CenterVertically
+
+                            is DietPlanState.Loading -> {
+                                Column(
+                                    modifier = Modifier.fillMaxSize(),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
                                 ) {
-                                    Icon(
-                                        Icons.Default.CheckCircle,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.primary
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.size(60.dp),
+                                        strokeWidth = 6.dp
                                     )
+                                    Spacer(modifier = Modifier.height(24.dp))
                                     Text(
-                                        "Plan Ready!",
-                                        style = MaterialTheme.typography.labelMedium,
-                                        color = MaterialTheme.colorScheme.primary,
-                                        fontWeight = FontWeight.Bold
+                                        "Connecting to AI...",
+                                        style = MaterialTheme.typography.titleMedium,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    Text(
+                                        "Creating your personalized diet plan",
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
-                                Divider(modifier = Modifier.padding(vertical = 12.dp))
-                                Text(
-                                    text = state.content,
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    lineHeight = MaterialTheme.typography.bodyLarge.lineHeight * 1.5
-                                )
                             }
-                        }
-                        is DietPlanState.Error -> {
-                            Column(
-                                modifier = Modifier.fillMaxSize(),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                Icon(
-                                    Icons.Default.Clear,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.error,
-                                    modifier = Modifier.size(64.dp)
-                                )
-                                Spacer(modifier = Modifier.height(16.dp))
-                                Text(
-                                    "Connection Error",
-                                    style = MaterialTheme.typography.titleLarge,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.error
-                                )
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Text(
-                                    state.message,
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                                Spacer(modifier = Modifier.height(24.dp))
-                                OutlinedButton(
-                                    onClick = onModify,
-                                    shape = RoundedCornerShape(12.dp)
+
+                            is DietPlanState.Streaming -> {
+                                Column(
+                                    modifier = Modifier.verticalScroll(scrollState)
                                 ) {
-                                    Text("Try Again")
+                                    Row(
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Icon(
+                                            Icons.Default.Star,
+                                            contentDescription = null,
+                                            tint = MaterialTheme.colorScheme.primary
+                                        )
+                                        Text(
+                                            "Generating...",
+                                            style = MaterialTheme.typography.labelMedium,
+                                            color = MaterialTheme.colorScheme.primary,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    }
+                                    Divider(modifier = Modifier.padding(vertical = 12.dp))
+                                    Text(
+                                        text = state.content,
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        lineHeight = MaterialTheme.typography.bodyLarge.lineHeight * 1.5
+                                    )
+                                    TypingIndicator()
+                                }
+                            }
+
+                            is DietPlanState.Success -> {
+                                Column(
+                                    modifier = Modifier.verticalScroll(scrollState)
+                                ) {
+                                    Row(
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Icon(
+                                            Icons.Default.CheckCircle,
+                                            contentDescription = null,
+                                            tint = MaterialTheme.colorScheme.primary
+                                        )
+                                        Text(
+                                            "Plan Ready!",
+                                            style = MaterialTheme.typography.labelMedium,
+                                            color = MaterialTheme.colorScheme.primary,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    }
+                                    Divider(modifier = Modifier.padding(vertical = 12.dp))
+                                    Text(
+                                        text = state.content,
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        lineHeight = MaterialTheme.typography.bodyLarge.lineHeight * 1.5
+                                    )
+                                }
+                            }
+
+                            is DietPlanState.Error -> {
+                                Column(
+                                    modifier = Modifier.fillMaxSize(),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    Icon(
+                                        Icons.Default.Clear,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.error,
+                                        modifier = Modifier.size(64.dp)
+                                    )
+                                    Spacer(modifier = Modifier.height(16.dp))
+                                    Text(
+                                        "Connection Error",
+                                        style = MaterialTheme.typography.titleLarge,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.error
+                                    )
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    Text(
+                                        state.message,
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                    Spacer(modifier = Modifier.height(24.dp))
+                                    OutlinedButton(
+                                        onClick = onModify,
+                                        shape = RoundedCornerShape(12.dp)
+                                    ) {
+                                        Text("Try Again")
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
 
-            if (state is DietPlanState.Success) {
-                Spacer(modifier = Modifier.height(16.dp))
+                if (state is DietPlanState.Success) {
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    OutlinedButton(
-                        onClick = {
-                            Log.d("DietPlanScreen", "Modify clicked")
-                            onModify()
-                        },
-                        modifier = Modifier.weight(1f).height(56.dp),
-                        shape = RoundedCornerShape(16.dp)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        Icon(Icons.Default.Edit, contentDescription = null)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("Modify", fontWeight = FontWeight.SemiBold)
-                    }
+                        OutlinedButton(
+                            onClick = {
+                                Log.d("DietPlanScreen", "Modify clicked")
+                                onModify()
+                            },
+                            modifier = Modifier.weight(1f).height(56.dp),
+                            shape = RoundedCornerShape(16.dp)
+                        ) {
+                            Icon(Icons.Default.Edit, contentDescription = null)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text("Modify", fontWeight = FontWeight.SemiBold)
+                        }
 
-                    Button(
-                        onClick = {
-                            Log.d("DietPlanScreen", "Accept clicked")
-                            onAccept()
-                        },
-                        modifier = Modifier.weight(1f).height(56.dp),
-                        shape = RoundedCornerShape(16.dp)
-                    ) {
-                        Icon(Icons.Default.CheckCircle, contentDescription = null)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("Accept", fontWeight = FontWeight.SemiBold)
+                        Button(
+                            onClick = {
+                                Log.d("DietPlanScreen", "Accept clicked")
+                                onAccept()
+                            },
+                            modifier = Modifier.weight(1f).height(56.dp),
+                            shape = RoundedCornerShape(16.dp)
+                        ) {
+                            Icon(Icons.Default.CheckCircle, contentDescription = null)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text("Accept", fontWeight = FontWeight.SemiBold)
+                        }
                     }
                 }
             }

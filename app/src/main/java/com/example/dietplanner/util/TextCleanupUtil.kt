@@ -1,6 +1,7 @@
 package com.example.dietplanner.com.example.dietplanner.util
 
 import android.util.Log
+import com.example.dietplanner.com.example.dietplanner.data.local.database.DayPlanEntity
 import java.util.Locale
 
 object TextCleanupUtil {
@@ -63,9 +64,10 @@ object TextCleanupUtil {
         Log.d(TAG, "Extracting day plans from text")
 
         val dayPattern = Regex(
-            "(?:^|\\n)\\s*(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Day1)\\s*:?\\s*\\n",
+            "(?i)(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Day\\s*\\d+)\\s*[:\\-\\s]+",
             RegexOption.IGNORE_CASE
         )
+
 
         val matches = dayPattern.findAll(cleanedText).toList()
         val dayPlans = mutableMapOf<String, String>()
@@ -95,6 +97,43 @@ object TextCleanupUtil {
 
         return dayPlans
     }
+    /**
+     * Converts the map output of extractDayPlans() into a list of DayPlanEntity for UI and database use.
+     */
+
+    fun toDayPlanEntities(
+        dietPlanId: Long,
+        dayPlansMap: Map<String, String>
+    ): List<DayPlanEntity> {
+        if (dayPlansMap.isEmpty()) {
+            return listOf(
+                DayPlanEntity(
+                    dietPlanId = dietPlanId,
+                    dayName = "Full Plan",
+                    dayNumber = 1,
+                    notes = "No day-wise structure found in this plan."
+                )
+            )
+        }
+
+        var dayCounter = 1
+        return dayPlansMap.map { (dayName, content) ->
+            val structured = parseDayContent(content)
+            DayPlanEntity(
+                dietPlanId = dietPlanId,
+                dayName = dayName,
+                dayNumber = dayCounter++,
+                breakfast = structured.breakfast,
+                lunch = structured.lunch,
+                dinner = structured.dinner,
+                snacks = structured.snacks,
+                exercise = structured.exercise,
+                hydration = structured.hydration,
+                notes = ""
+            )
+        }
+    }
+
 
     /**
      * Parses a day's content into structured meals and activities
@@ -119,6 +158,7 @@ object TextCleanupUtil {
 
         return pattern.find(text)?.groupValues?.get(1)?.trim() ?: ""
     }
+
 
     data class DayPlan(
         val breakfast: String,

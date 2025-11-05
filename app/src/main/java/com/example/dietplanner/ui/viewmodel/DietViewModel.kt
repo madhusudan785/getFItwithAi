@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.dietplanner.com.example.dietplanner.data.local.database.DayPlanEntity
 import com.example.dietplanner.com.example.dietplanner.data.local.database.DietPlanEntity
 import com.example.dietplanner.com.example.dietplanner.data.repository.DietPlanLocalRepository
+import com.example.dietplanner.com.example.dietplanner.util.TextCleanupUtil
 import com.example.dietplanner.data.local.UserPreferencesManager
 import com.example.dietplanner.data.model.DietPlanState
 import com.example.dietplanner.data.model.UserProfile
@@ -72,6 +73,7 @@ class DietViewModel(
     fun generateDietPlan(userProfile: UserProfile) {
         Log.d(TAG, "=== Starting Diet Plan Generation ===")
         viewModelScope.launch {
+            Log.d("DietViewModel", "Generating diet plan for ${userProfile.age}")
             try {
                 _dietPlanState.value = DietPlanState.Loading
                 Log.d(TAG, "State: Loading")
@@ -80,6 +82,7 @@ class DietViewModel(
                 var chunkCount = 0
 
                 repository.generateDietPlan(userProfile).collect { event ->
+                    Log.d("DietViewModel", "DietPlanState updated: $event")
                     when (event) {
                         is StreamEvent.Connected -> {
                             Log.i(TAG, "✅ Connected to stream")
@@ -143,21 +146,24 @@ class DietViewModel(
     }
 
     fun loadDietPlan(planId: Long) {
-        Log.d(TAG, "Loading diet plan: $planId")
         viewModelScope.launch {
-            try {
-                val plan = localRepository.getDietPlanById(planId)
-                _selectedDietPlan.value = plan
+            val plan = localRepository.getDietPlanById(planId)
+            _selectedDietPlan.value = plan
+            Log.d("DietInDays", "Loaded plan: ${plan?.name}, cleaned length=${plan?.cleanedContent?.length}")
 
-                localRepository.getDayPlansForDiet(planId).collect { dayPlans ->
-                    _selectedDayPlans.value = dayPlans
-                    Log.d(TAG, "Loaded ${dayPlans.size} day plans")
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "❌ Error loading diet plan", e)
+            plan?.let {
+                val dayPlansMap = TextCleanupUtil.extractDayPlans(it.cleanedContent)
+                Log.d("DietInDays", "Extracted ${dayPlansMap.size} days: ${dayPlansMap.keys}")
+
+                val structuredPlans = TextCleanupUtil.toDayPlanEntities(it.id, dayPlansMap)
+                Log.d("DietInDays", "Structured into ${structuredPlans.size} DayPlanEntity entries")
+
+                _selectedDayPlans.value = structuredPlans
             }
         }
     }
+
+
 
     fun toggleFavorite(plan: DietPlanEntity) {
         viewModelScope.launch {
