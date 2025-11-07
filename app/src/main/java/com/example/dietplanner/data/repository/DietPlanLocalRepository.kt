@@ -5,7 +5,9 @@ import com.example.dietplanner.com.example.dietplanner.data.local.database.DayPl
 import com.example.dietplanner.com.example.dietplanner.data.local.database.DietPlanDao
 import com.example.dietplanner.com.example.dietplanner.data.local.database.DietPlanEntity
 import com.example.dietplanner.com.example.dietplanner.util.TextCleanupUtil
+import com.example.dietplanner.data.model.ParsedDietPlan
 import com.example.dietplanner.data.model.UserProfile
+import com.google.gson.Gson
 
 import kotlinx.coroutines.flow.Flow
 
@@ -55,9 +57,13 @@ class DietPlanLocalRepository(private val dao: DietPlanDao) {
         return planId
     }
 
-    private fun extractAndCreateDayPlans(dietPlanId: Long, cleanedContent: String): List<DayPlanEntity> {
+    private fun extractAndCreateDayPlans(
+        dietPlanId: Long,
+        cleanedContent: String
+    ): List<DayPlanEntity> {
         val dayPlansMap = TextCleanupUtil.extractDayPlans(cleanedContent)
-        val dayNames = listOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+        val dayNames =
+            listOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 
         return dayPlansMap.entries.mapIndexed { index, entry ->
             val dayPlan = TextCleanupUtil.parseDayContent(entry.value)
@@ -75,6 +81,7 @@ class DietPlanLocalRepository(private val dao: DietPlanDao) {
             )
         }
     }
+
 
     fun getAllDietPlans(): Flow<List<DietPlanEntity>> = dao.getAllDietPlans()
 
@@ -99,4 +106,42 @@ class DietPlanLocalRepository(private val dao: DietPlanDao) {
     }
 
     suspend fun getDietPlansCount(): Int = dao.getDietPlansCount()
+    suspend fun saveParsedDietPlan(parsed: ParsedDietPlan, profile: UserProfile): Long {
+        Log.d(TAG, "Saving structured JSON plan: ${parsed.planType}")
+
+        val plan = DietPlanEntity(
+            name = "AI Diet Plan (${parsed.planType})",
+            planType = parsed.planType,
+            content = Gson().toJson(parsed), // store clean JSON text
+            cleanedContent = parsed.notes,
+            userGender = profile.gender,
+            userHeight = profile.height,
+            userWeight = profile.weight,
+            userAge = profile.age,
+            createdAt = System.currentTimeMillis(),
+            isFavorite = false
+        )
+
+        val planId = dao.insertDietPlan(plan)
+        Log.d(TAG, "✅ Structured diet plan saved with ID: $planId")
+
+        // Convert each day into DayPlanEntity
+        val dayPlans = parsed.days.mapIndexed { index, day ->
+            DayPlanEntity(
+                dietPlanId = planId,
+                dayName = day.day,
+                dayNumber = index + 1,
+                breakfast = day.meals.breakfast,
+                lunch = day.meals.lunch,
+                dinner = day.meals.dinner,
+                snacks = "${day.meals.snack1}, ${day.meals.snack2}",
+                exercise = day.exercise,
+                hydration = day.hydration
+            )
+        }
+
+        dao.insertDayPlans(dayPlans)
+        Log.d(TAG, "✅ Saved ${dayPlans.size} structured day plans for planId=$planId")
+        return planId
+    }
 }

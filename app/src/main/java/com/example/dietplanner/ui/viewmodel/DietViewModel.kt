@@ -9,9 +9,11 @@ import com.example.dietplanner.com.example.dietplanner.data.repository.DietPlanL
 import com.example.dietplanner.com.example.dietplanner.util.TextCleanupUtil
 import com.example.dietplanner.data.local.UserPreferencesManager
 import com.example.dietplanner.data.model.DietPlanState
+import com.example.dietplanner.data.model.ParsedDietPlan
 import com.example.dietplanner.data.model.UserProfile
 import com.example.dietplanner.data.network.StreamEvent
 import com.example.dietplanner.data.repository.DietRepository
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 class DietViewModel(
@@ -96,11 +98,92 @@ class DietViewModel(
                             _dietPlanState.value = DietPlanState.Streaming(currentContent)
                         }
                         is StreamEvent.Complete -> {
-                            val finalContent = contentBuilder.toString()
-                            Log.i(TAG, "✅ Stream complete - Total chunks: $chunkCount, Total length: ${finalContent.length}")
-                            _generatedPlanContent.value = finalContent
-                            _dietPlanState.value = DietPlanState.Success(finalContent)
+                            val finalContent = contentBuilder.toString().trim()
+                            Log.d(TAG, "🟢 Stream complete, total length: ${finalContent.length}")
+
+                            // 🧩 Handle both markers, no matter the order
+                            val coachMarker = "---COACH MESSAGE---"
+                            val jsonMarker = "---JSON PLAN---"
+
+                            var coachMessage = ""
+                            var jsonPart = ""
+
+                            // Case 1: If both markers exist
+                            if (finalContent.contains(coachMarker) && finalContent.contains(jsonMarker)) {
+                                val coachIndex = finalContent.indexOf(coachMarker)
+                                val jsonIndex = finalContent.indexOf(jsonMarker)
+
+                                if (coachIndex < jsonIndex) {
+                                    coachMessage = finalContent.substringAfter(coachMarker).substringBefore(jsonMarker).trim()
+                                    jsonPart = finalContent.substringAfter(jsonMarker).trim()
+                                } else {
+                                    coachMessage = finalContent.substringAfter(coachMarker).trim()
+                                    jsonPart = finalContent.substringAfter(jsonMarker).trim()
+                                }
+                            }
+                            // Case 2: Only JSON found
+                            else if (finalContent.contains(jsonMarker)) {
+                                jsonPart = finalContent.substringAfter(jsonMarker).trim()
+                            }
+                            // Case 3: Only coach message found
+                            else if (finalContent.contains(coachMarker)) {
+                                coachMessage = finalContent.substringAfter(coachMarker).trim()
+                            }
+                            // Case 4: Fallback
+                            else {
+                                coachMessage = finalContent
+                            }
+
+                            // 🧹 Clean coach message markdown
+                            val cleanCoachMessage = coachMessage
+                                .replace(Regex("```json|```", RegexOption.IGNORE_CASE), "")
+                                .replace(Regex("\\*+"), "")
+                                .replace(Regex("(?m)^\\s*[-*+]\\s+"), "• ")
+                                .replace(Regex("\\s+"), " ")
+                                .trim()
+
+                            val displayMessage = buildString {
+                                appendLine(cleanCoachMessage)
+                                appendLine()
+                                appendLine("✅ Your personalized diet plan is ready!")
+                            }
+
+                            _generatedPlanContent.value = displayMessage
+                            _dietPlanState.value = DietPlanState.Success(displayMessage)
+
+                            // 🧩 Try parsing structured JSON
+                            if (jsonPart.isNotBlank()) {
+                                try {
+                                    var cleanJson = jsonPart
+                                        .replace("```json", "", ignoreCase = true)
+                                        .replace("```", "")
+                                        .trim()
+
+                                    if (cleanJson.startsWith("\"") && cleanJson.endsWith("\"")) {
+                                        cleanJson = cleanJson.removeSurrounding("\"")
+                                            .replace("\\n", "")
+                                            .replace("\\\"", "\"")
+                                    }
+
+                                    val jsonStart = cleanJson.indexOf('{')
+                                    val jsonEnd = cleanJson.lastIndexOf('}')
+                                    if (jsonStart != -1 && jsonEnd != -1) {
+                                        cleanJson = cleanJson.substring(jsonStart, jsonEnd + 1)
+                                    }
+
+                                    val parsedPlan = Gson().fromJson(cleanJson, ParsedDietPlan::class.java)
+                                    Log.i(TAG, "✅ Parsed structured plan for ${parsedPlan.days.size} days")
+
+                                    saveParsedDietPlan(parsedPlan)
+                                } catch (e: Exception) {
+                                    Log.e(TAG, "❌ Failed to parse structured JSON (Ask Gemini)", e)
+                                }
+                            } else {
+                                Log.w(TAG, "⚠️ No valid JSON detected in response.")
+                            }
                         }
+
+
                         is StreamEvent.Error -> {
                             Log.e(TAG, "❌ Stream error: ${event.message}")
                             _dietPlanState.value = DietPlanState.Error(event.message)
@@ -113,6 +196,25 @@ class DietViewModel(
             }
         }
     }
+
+    private fun saveParsedDietPlan(parsedPlan: ParsedDietPlan) {
+        viewModelScope.launch {
+            try {
+                val profile = _userProfile.value
+                if (profile == null) {
+                    Log.e(TAG, "❌ No user profile available to save structured plan")
+                    return@launch
+                }
+
+                localRepository.saveParsedDietPlan(parsedPlan, profile)
+                Log.i(TAG, "✅ Structured diet plan saved successfully")
+
+            } catch (e: Exception) {
+                Log.e(TAG, "❌ Failed to save parsed diet plan", e)
+            }
+        }
+    }
+
 
     fun saveDietPlan(name: String = "My Diet Plan", planType: String = "weekly") {
         Log.d(TAG, "=== Saving Diet Plan to Database ===")

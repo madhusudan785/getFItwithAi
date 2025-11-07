@@ -4,6 +4,7 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -18,7 +19,9 @@ import androidx.compose.ui.unit.dp
 import com.example.dietplanner.com.example.dietplanner.util.EdgeToEdgeScaffold
 import com.example.dietplanner.com.example.dietplanner.util.SetStatusBarColor
 import com.example.dietplanner.data.model.DietPlanState
+import com.example.dietplanner.data.model.ParsedDietPlan
 import com.example.dietplanner.ui.theme.DietPlannerTheme
+import com.google.gson.Gson
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -176,13 +179,47 @@ fun DietPlanScreen(
                                         )
                                     }
                                     Divider(modifier = Modifier.padding(vertical = 12.dp))
-                                    Text(
-                                        text = state.content,
-                                        style = MaterialTheme.typography.bodyLarge,
-                                        lineHeight = MaterialTheme.typography.bodyLarge.lineHeight * 1.5
-                                    )
+
+                                    SelectionContainer {
+                                        // 💡 NEW LOGIC
+                                        val parsedPlan = remember(state.content) {
+                                            try {
+                                                Gson().fromJson(state.content, ParsedDietPlan::class.java)
+                                            } catch (e: Exception) {
+                                                null
+                                            }
+                                        }
+
+                                        if (parsedPlan != null) {
+                                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                                Text(
+                                                    text = "🍽️ Weekly Diet Plan (${parsedPlan.planType.uppercase()})",
+                                                    style = MaterialTheme.typography.titleLarge,
+                                                    fontWeight = FontWeight.Bold
+                                                )
+                                                Text(
+                                                    text = "🔥 ${parsedPlan.caloriesTarget} kcal/day target",
+                                                    style = MaterialTheme.typography.bodyMedium,
+                                                    color = MaterialTheme.colorScheme.primary
+                                                )
+                                                Text(
+                                                    text = parsedPlan.notes,
+                                                    style = MaterialTheme.typography.bodyMedium,
+                                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                )
+                                            }
+                                        } else {
+                                            // Display coach message text
+                                            Text(
+                                                text = state.content,
+                                                style = MaterialTheme.typography.bodyLarge,
+                                                lineHeight = MaterialTheme.typography.bodyLarge.lineHeight * 1.5
+                                            )
+                                        }
+                                    }
                                 }
                             }
+
 
                             is DietPlanState.Error -> {
                                 Column(
