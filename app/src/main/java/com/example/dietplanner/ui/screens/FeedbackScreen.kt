@@ -1,6 +1,7 @@
 package com.example.dietplanner.ui.screens
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
@@ -12,24 +13,27 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.dietplanner.com.example.dietplanner.util.SetStatusBarColor
+import com.example.dietplanner.ui.navigation.Screen
 import com.example.dietplanner.ui.theme.DietPlannerTheme
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedbackScreen(
+    planId: Long,
+    navController: NavController,
     onProceedToMonthly: () -> Unit,
     onModifyPreferences: () -> Unit,
     onRegenerate: () -> Unit,
     onBack: () -> Unit
 ) {
-
-    Log.d("FeedbackScreen", "Screen loaded")
+    Log.d("FeedbackScreen", "Screen loaded with planId=$planId")
 
     var isVisible by remember { mutableStateOf(false) }
 
@@ -37,15 +41,12 @@ fun FeedbackScreen(
         isVisible = true
     }
 
+    val context = LocalContext.current
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Text(
-                        "Success!",
-                        fontWeight = FontWeight.Bold
-                    )
-                },
+                title = { Text("Success!", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = {
                         Log.d("FeedbackScreen", "Back clicked")
@@ -76,7 +77,7 @@ fun FeedbackScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                // Animated checkmark
+                // ✅ Animated checkmark
                 val infiniteTransition = rememberInfiniteTransition(label = "checkmark")
                 val scale by infiniteTransition.animateFloat(
                     initialValue = 1f,
@@ -127,6 +128,7 @@ fun FeedbackScreen(
 
                 Spacer(modifier = Modifier.height(32.dp))
 
+                // ✅ Proceed to Monthly Plan
                 Button(
                     onClick = {
                         Log.d("FeedbackScreen", "Proceed to monthly clicked")
@@ -147,6 +149,7 @@ fun FeedbackScreen(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
+                // ✅ Modify Preferences
                 OutlinedButton(
                     onClick = {
                         Log.d("FeedbackScreen", "Modify preferences clicked")
@@ -164,6 +167,7 @@ fun FeedbackScreen(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
+                // ✅ Regenerate Plan
                 OutlinedButton(
                     onClick = {
                         Log.d("FeedbackScreen", "Regenerate clicked")
@@ -178,20 +182,47 @@ fun FeedbackScreen(
                     Spacer(modifier = Modifier.width(8.dp))
                     Text("Regenerate Weekly Plan", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
                 }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                // ✅ View Weekly Plan
+                Button(
+                    onClick = {
+                        if (planId != -1L) {
+                            Log.d("FeedbackScreen", "Navigating to DietInDaysScreen with planId=$planId")
+                            navController.navigate(Screen.DietInDays.createRoute(planId))
+                        } else {
+                            Toast.makeText(context, "⚠️ No saved plan found!", Toast.LENGTH_SHORT).show()
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondary
+                    )
+                ) {
+                    Icon(Icons.Default.Info, contentDescription = null)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("View My Weekly Plan", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                }
             }
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun FeedbackScreenPreview() {
-    DietPlannerTheme {
-        FeedbackScreen(
-            onProceedToMonthly = {},
-            onModifyPreferences = {},
-            onRegenerate = {},
-            onBack = {}
-        )
-    }
-}
+
+//@Preview(showBackground = true)
+//@Composable
+//fun FeedbackScreenPreview() {
+//    DietPlannerTheme {
+//        FeedbackScreen(
+//            onProceedToMonthly = {},
+//            onModifyPreferences = {},
+//            onRegenerate = {},
+//            onBack = {},
+//
+//        )
+//    }
+//}

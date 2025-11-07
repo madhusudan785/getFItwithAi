@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.dietplanner.com.example.dietplanner.data.local.database.DayPlanEntity
 import com.example.dietplanner.com.example.dietplanner.data.local.database.DietPlanEntity
 import com.example.dietplanner.com.example.dietplanner.data.repository.DietPlanLocalRepository
-import com.example.dietplanner.com.example.dietplanner.util.TextCleanupUtil
 import com.example.dietplanner.data.local.UserPreferencesManager
 import com.example.dietplanner.data.model.DietPlanState
 import com.example.dietplanner.data.model.ParsedDietPlan
@@ -14,8 +13,14 @@ import com.example.dietplanner.data.model.UserProfile
 import com.example.dietplanner.data.network.StreamEvent
 import com.example.dietplanner.data.repository.DietRepository
 import com.google.gson.Gson
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+
 class DietViewModel(
     private val repository: DietRepository,
     private val localRepository: DietPlanLocalRepository,
@@ -47,6 +52,9 @@ class DietViewModel(
     // Generated plan content (to be saved)
     private val _generatedPlanContent = MutableStateFlow<String>("")
     val generatedPlanContent: StateFlow<String> = _generatedPlanContent.asStateFlow()
+
+    private var lastSavedPlanId: Long? = null
+
 
     init {
         Log.d(TAG, "ViewModel initialized")
@@ -206,14 +214,29 @@ class DietViewModel(
                     return@launch
                 }
 
-                localRepository.saveParsedDietPlan(parsedPlan, profile)
-                Log.i(TAG, "✅ Structured diet plan saved successfully")
+                val planId = localRepository.saveParsedDietPlan(parsedPlan, profile)
+                lastSavedPlanId = planId // 👈 store last saved plan ID
+
+                Log.i(TAG, "✅ Structured diet plan saved successfully with ID: $planId")
 
             } catch (e: Exception) {
                 Log.e(TAG, "❌ Failed to save parsed diet plan", e)
             }
         }
     }
+
+    suspend fun acceptGeneratedPlan(): Long? {
+        // Ensure we wait until last plan is fully written to DB
+        delay(300) // small wait to let Room finish (safe guard)
+        return lastSavedPlanId?.also {
+            Log.i(TAG, "✅ Returning last saved plan ID after DB commit: $it")
+        } ?: run {
+            Log.e(TAG, "⚠️ No structured plan found to accept")
+            null
+        }
+    }
+
+
 
 
     fun saveDietPlan(name: String = "My Diet Plan", planType: String = "weekly") {
@@ -251,19 +274,17 @@ class DietViewModel(
         viewModelScope.launch {
             val plan = localRepository.getDietPlanById(planId)
             _selectedDietPlan.value = plan
-            Log.d("DietInDays", "Loaded plan: ${plan?.name}, cleaned length=${plan?.cleanedContent?.length}")
+            Log.d("DietInDays", "Loaded plan: ${plan?.name}")
 
             plan?.let {
-                val dayPlansMap = TextCleanupUtil.extractDayPlans(it.cleanedContent)
-                Log.d("DietInDays", "Extracted ${dayPlansMap.size} days: ${dayPlansMap.keys}")
-
-                val structuredPlans = TextCleanupUtil.toDayPlanEntities(it.id, dayPlansMap)
-                Log.d("DietInDays", "Structured into ${structuredPlans.size} DayPlanEntity entries")
-
-                _selectedDayPlans.value = structuredPlans
+                localRepository.getDayPlansForDiet(planId).collect { days ->
+                    _selectedDayPlans.value = days
+                    Log.d("DietInDays", "Loaded ${days.size} day plans for plan $planId")
+                }
             }
         }
     }
+
 
 
 

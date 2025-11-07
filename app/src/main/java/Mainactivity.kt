@@ -85,48 +85,47 @@ fun DietPlannerApp(
     val dietPlanState by viewModel.dietPlanState.collectAsState()
     val userProfile by viewModel.userProfile.collectAsState()
     val allDietPlans by viewModel.allDietPlans.collectAsState()
+
     val selectedDietPlan by viewModel.selectedDietPlan.collectAsState()
     val selectedDayPlans by viewModel.selectedDayPlans.collectAsState()
 
     val isFirstLaunchState = preferencesManager.isFirstLaunch.collectAsState(initial = null)
 
-
     isFirstLaunchState.value?.let { firstLaunchDone ->
         val startDestination = if (!firstLaunchDone) Screen.Welcome.route else Screen.Home.route
 
-
-        // Handle errors
+        // ✅ Handle DietPlanState for UI transitions & errors
         LaunchedEffect(dietPlanState) {
             when (dietPlanState) {
                 is DietPlanState.Loading -> {
                     Log.d("Navigation", "Generating diet plan (loading...)")
                 }
+
                 is DietPlanState.Streaming -> {
-                    // Optional: You can choose to navigate here if you want to show progress
                     if (navController.currentBackStackEntry?.destination?.route != Screen.DietPlan.route) {
                         Log.d("Navigation", "Navigating to DietPlan during streaming")
                         navController.navigate(Screen.DietPlan.route)
                     }
                 }
+
                 is DietPlanState.Success -> {
                     Log.d("Navigation", "Diet plan successfully generated.")
                     if (navController.currentBackStackEntry?.destination?.route != Screen.DietPlan.route) {
                         navController.navigate(Screen.DietPlan.route)
                     }
                 }
+
                 is DietPlanState.Error -> {
                     scope.launch {
                         snackbarHostState.showSnackbar((dietPlanState as DietPlanState.Error).message)
                     }
                 }
+
                 else -> Unit
             }
         }
 
-
-        Scaffold(
-            snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
-        ) { padding ->
+        Scaffold(snackbarHost = { SnackbarHost(hostState = snackbarHostState) }) { padding ->
             Box(modifier = Modifier.padding(padding)) {
                 NavHost(
                     navController = navController,
@@ -156,7 +155,9 @@ fun DietPlannerApp(
                         )
                     }
                 ) {
-
+                    // =======================
+                    // 🟩 WELCOME SCREEN
+                    // =======================
                     composable(Screen.Welcome.route) {
                         WelcomeScreen(
                             onGetStarted = {
@@ -169,13 +170,15 @@ fun DietPlannerApp(
                             }
                         )
                     }
+
+                    // =======================
+                    // 🏠 HOME SCREEN
+                    // =======================
                     composable(Screen.Home.route) {
                         Log.d("Navigation", "Navigated to: Home")
                         HomeScreen(
                             savedPlans = allDietPlans,
-                            onProfileClick = {
-                                navController.navigate(Screen.Input.route)
-                            },
+                            onProfileClick = { navController.navigate(Screen.Input.route) },
                             onPlanClick = { planId ->
                                 Log.d("Navigation", "Plan clicked: $planId")
                                 viewModel.loadDietPlan(planId)
@@ -186,19 +189,19 @@ fun DietPlannerApp(
                         )
                     }
 
-
+                    // =======================
+                    // 🧍 INPUT SCREEN
+                    // =======================
                     composable(Screen.Input.route) {
                         Log.d("Navigation", "Navigated to: Input")
                         InputScreen(
                             existingProfile = userProfile,
-                            // InputScreen
                             onSubmit = { profile ->
                                 Log.d("InputScreen", "Submitting profile: $profile")
                                 viewModel.saveUserProfile(profile)
                                 viewModel.generateDietPlan(profile)
                                 navController.navigate(Screen.DietPlan.route)
-                            }
-                            ,
+                            },
                             onBack = {
                                 viewModel.resetState()
                                 navController.popBackStack()
@@ -206,18 +209,26 @@ fun DietPlannerApp(
                         )
                     }
 
+                    // =======================
+                    // 🥗 DIET PLAN SCREEN
+                    // =======================
                     composable(Screen.DietPlan.route) {
                         Log.d("Navigation", "Navigated to: DietPlan")
+                        val coroutineScope = rememberCoroutineScope()
+
                         DietPlanScreen(
                             state = dietPlanState,
                             onAccept = {
-                                Log.d("Navigation", "Diet plan accepted - saving")
-                                viewModel.saveDietPlan()
-                                navController.navigate(Screen.Feedback.route)
+                                Log.d("Navigation", "Diet plan accepted - saving structured plan")
+                                coroutineScope.launch {
+                                    val planId = viewModel.acceptGeneratedPlan()
+                                    Log.d("Navigation", "Navigating to Feedback with planId=$planId")
+                                    navController.navigate(Screen.Feedback.createRoute(planId ?: -1L)) {
+                                        popUpTo(Screen.DietPlan.route) { inclusive = true }
+                                    }
+                                }
                             },
-                            onModify = {
-                                navController.popBackStack()
-                            },
+                            onModify = { navController.popBackStack() },
                             onBack = {
                                 viewModel.resetState()
                                 navController.popBackStack()
@@ -225,57 +236,60 @@ fun DietPlannerApp(
                         )
                     }
 
+                    // =======================
+                    // 💬 FEEDBACK SCREEN
+                    // =======================
+                    composable(
+                        route = Screen.Feedback.route,
+                        arguments = listOf(navArgument("planId") { type = NavType.LongType })
+                    ) { backStackEntry ->
+                        val planId = backStackEntry.arguments?.getLong("planId") ?: -1L
+
+                        FeedbackScreen(
+                            planId = planId,
+                            navController = navController,
+                            onProceedToMonthly = { /* TODO */ },
+                            onModifyPreferences = { navController.popBackStack() },
+                            onRegenerate = { navController.navigate(Screen.DietPlan.route) },
+                            onBack = { navController.popBackStack() }
+                        )
+                    }
+
+                    // =======================
+                    // 📅 DIET-IN-DAYS SCREEN (Reactive)
+                    // =======================
                     composable(
                         route = Screen.DietInDays.route,
                         arguments = listOf(navArgument("planId") { type = NavType.LongType })
                     ) { backStackEntry ->
-                        val planId = backStackEntry.arguments?.getLong("planId") ?: 0L
+                        val planId = backStackEntry.arguments?.getLong("planId") ?: -1L
                         Log.d("Navigation", "Navigated to: DietInDays for plan $planId")
 
+                        // 🔹 Trigger data load when screen opens
+                        LaunchedEffect(planId) {
+                            if (planId != -1L) {
+                                Log.d("Navigation", "Loading plan data for planId=$planId")
+                                viewModel.loadDietPlan(planId)
+                            }
+                        }
+
+                        // 🔹 Observe data reactively
+                        val dietPlan by viewModel.selectedDietPlan.collectAsState()
+                        val dayPlans by viewModel.selectedDayPlans.collectAsState()
+
                         DietInDaysScreen(
-                            dietPlan = selectedDietPlan,
-                            dayPlans = selectedDayPlans,
-                            onBack = {
-                                navController.popBackStack()
-                            }
+                            dietPlan = dietPlan,
+                            dayPlans = dayPlans,
+                            onBack = { navController.popBackStack() }
                         )
                     }
 
-                    composable(Screen.Feedback.route) {
-                        Log.d("Navigation", "Navigated to: Feedback")
-                        FeedbackScreen(
-                            onProceedToMonthly = {
-                                scope.launch {
-                                    snackbarHostState.showSnackbar("Monthly plan feature coming soon!")
-                                }
-                            },
-                            onModifyPreferences = {
-                                viewModel.resetState()
-                                navController.navigate(Screen.Input.route) {
-                                    popUpTo(Screen.Home.route)
-                                }
-                            },
-                            onRegenerate = {
-                                userProfile?.let { profile ->
-                                    viewModel.generateDietPlan(profile)
-                                    navController.popBackStack()
-                                }
-                            },
-                            onBack = {
-                                navController.navigate(Screen.Home.route) {
-                                    popUpTo(Screen.Home.route) { inclusive = true }
-                                }
-                            }
-                        )
-                    }
-
+                    // =======================
+                    // ⏰ REMINDER SCREEN
+                    // =======================
                     composable(Screen.Reminder.route) {
                         Log.d("Navigation", "Navigated to: Reminder")
-                        ReminderScreen(
-                            onBack = {
-                                navController.popBackStack()
-                            }
-                        )
+                        ReminderScreen(onBack = { navController.popBackStack() })
                     }
                 }
             }
