@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.dietplanner.app-mergeDebugResources-54:/values-lv/values-lv.xml",
+            "outputFile": "com.example.dietplanner.app-mergeDebugResources-55:/values-lv/values-lv.xml",
             "map": [
                 {
                     "source": "C:\\Users\\gufac\\.gradle\\wrapper\\caches\\8.9\\transforms\\da54cba46818d28233d9ba41a921e8c9\\transformed\\jetified-material3-release\\res\\values-lv\\values-lv.xml",

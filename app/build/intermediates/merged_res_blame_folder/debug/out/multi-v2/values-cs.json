@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.dietplanner.app-mergeDebugResources-54:/values-cs/values-cs.xml",
+            "outputFile": "com.example.dietplanner.app-mergeDebugResources-55:/values-cs/values-cs.xml",
             "map": [
                 {
                     "source": "C:\\Users\\gufac\\.gradle\\wrapper\\caches\\8.9\\transforms\\48bf16037714990cc24c67d57814b82f\\transformed\\core-1.12.0\\res\\values-cs\\values-cs.xml",

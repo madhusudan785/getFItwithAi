@@ -251,12 +251,12 @@ fun DietPlannerApp(
                             onProceedToMonthly = { /* TODO */ },
                             onModifyPreferences = { navController.popBackStack() },
                             onRegenerate = { navController.navigate(Screen.DietPlan.route) },
-                            onBack = { navController.popBackStack() }
+                            onBack = { Screen.Home.route }
                         )
                     }
 
                     // =======================
-                    // 📅 DIET-IN-DAYS SCREEN (Reactive)
+                    // 📅 DIET-IN-DAYS SCREEN
                     // =======================
                     composable(
                         route = Screen.DietInDays.route,

@@ -22,13 +22,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
@@ -49,13 +45,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.dietplanner.com.example.dietplanner.data.local.database.DayPlanEntity
 import com.example.dietplanner.com.example.dietplanner.data.local.database.DietPlanEntity
 import com.example.dietplanner.com.example.dietplanner.util.EdgeToEdgeScaffold
-import com.example.dietplanner.com.example.dietplanner.util.SetStatusBarColor
 import com.example.dietplanner.ui.theme.DietPlannerTheme
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
@@ -93,7 +91,8 @@ fun DietInDaysScreen(
                     )
                 )
             }
-        ) { padding ->
+        ) {
+            padding ->
             if (dayPlans.isEmpty()) {
                 // Empty state
                 Box(
@@ -170,7 +169,6 @@ fun DietInDaysScreen(
         }
     }
 }
-
 @Composable
 fun DayPlanContent(dayPlan: DayPlanEntity) {
     LazyColumn(
@@ -187,7 +185,7 @@ fun DayPlanContent(dayPlan: DayPlanEntity) {
                     MealCard(
                         title = "Breakfast",
                         content = dayPlan.breakfast,
-                        icon = Icons.Default.Face,
+                        icon = Icons.Rounded.WbSunny,
                         color = MaterialTheme.colorScheme.primaryContainer
                     )
                 }
@@ -200,7 +198,7 @@ fun DayPlanContent(dayPlan: DayPlanEntity) {
                     MealCard(
                         title = "Lunch",
                         content = dayPlan.lunch,
-                        icon = Icons.Default.AddCircle,
+                        icon = Icons.Rounded.LunchDining,
                         color = MaterialTheme.colorScheme.secondaryContainer
                     )
                 }
@@ -213,7 +211,7 @@ fun DayPlanContent(dayPlan: DayPlanEntity) {
                     MealCard(
                         title = "Dinner",
                         content = dayPlan.dinner,
-                        icon = Icons.Default.AddCircle,
+                        icon = Icons.Rounded.Nightlight,
                         color = MaterialTheme.colorScheme.tertiaryContainer
                     )
                 }
@@ -226,7 +224,7 @@ fun DayPlanContent(dayPlan: DayPlanEntity) {
                     MealCard(
                         title = "Snacks",
                         content = dayPlan.snacks,
-                        icon = Icons.Default.ShoppingCart,
+                        icon = Icons.Rounded.Fastfood,
                         color = MaterialTheme.colorScheme.surfaceVariant
                     )
                 }
@@ -239,7 +237,7 @@ fun DayPlanContent(dayPlan: DayPlanEntity) {
                     MealCard(
                         title = "Exercise",
                         content = dayPlan.exercise,
-                        icon = Icons.Default.Settings,
+                        icon = Icons.Rounded.FitnessCenter,
                         color = MaterialTheme.colorScheme.errorContainer
                     )
                 }
@@ -252,7 +250,7 @@ fun DayPlanContent(dayPlan: DayPlanEntity) {
                     MealCard(
                         title = "Hydration",
                         content = dayPlan.hydration,
-                        icon = Icons.Default.FavoriteBorder,
+                        icon = Icons.Rounded.WaterDrop,
                         color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
                     )
                 }
@@ -261,57 +259,56 @@ fun DayPlanContent(dayPlan: DayPlanEntity) {
 
         item { Spacer(modifier = Modifier.height(16.dp)) }
     }
-
-
 }
 
 @Composable
-
-    fun MealCard(
-        title: String,
-        content: String,
-        icon: androidx.compose.ui.graphics.vector.ImageVector,
-        color: androidx.compose.ui.graphics.Color
+fun MealCard(
+    title: String,
+    content: String,
+    icon: ImageVector,
+    color: Color
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = color.copy(alpha = 0.8f)
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = color),
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        Column(
+            Modifier.padding(horizontal = 20.dp, vertical = 12.dp)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        icon,
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Text(
-                        title,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-                Divider()
-                Spacer(modifier = Modifier.height(8.dp))
-
+                Icon(
+                    imageVector = icon,
+                    contentDescription = title,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.size(28.dp)
+                )
                 Text(
-                    content,
-                    style = MaterialTheme.typography.bodyMedium,
-                    lineHeight = MaterialTheme.typography.bodyMedium.lineHeight * 1.5
+                    title,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
                 )
             }
+
+            Spacer(modifier = Modifier.height(8.dp))
+            Divider()
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                content,
+                style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp),
+                lineHeight = MaterialTheme.typography.bodyMedium.lineHeight * 1.5
+            )
         }
     }
+}
+
 
 
 @Preview(showBackground = true)

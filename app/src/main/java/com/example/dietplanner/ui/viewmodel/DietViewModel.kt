@@ -237,53 +237,26 @@ class DietViewModel(
     }
 
 
-
-
-    fun saveDietPlan(name: String = "My Diet Plan", planType: String = "weekly") {
-        Log.d(TAG, "=== Saving Diet Plan to Database ===")
-        viewModelScope.launch {
-            try {
-                val content = _generatedPlanContent.value
-                val profile = _userProfile.value
-
-                if (content.isBlank()) {
-                    Log.e(TAG, "❌ No content to save")
-                    return@launch
-                }
-
-                if (profile == null) {
-                    Log.e(TAG, "❌ No user profile available")
-                    return@launch
-                }
-
-                val planId = localRepository.saveDietPlan(
-                    name = name,
-                    rawContent = content,
-                    planType = planType,
-                    userProfile = profile
-                )
-
-                Log.i(TAG, "✅ Diet plan saved with ID: $planId")
-            } catch (e: Exception) {
-                Log.e(TAG, "❌ Error saving diet plan", e)
-            }
-        }
-    }
-
     fun loadDietPlan(planId: Long) {
         viewModelScope.launch {
-            val plan = localRepository.getDietPlanById(planId)
-            _selectedDietPlan.value = plan
-            Log.d("DietInDays", "Loaded plan: ${plan?.name}")
+            Log.d("DietInDays", "Loading plan details for planId=$planId")
 
-            plan?.let {
-                localRepository.getDayPlansForDiet(planId).collect { days ->
-                    _selectedDayPlans.value = days
-                    Log.d("DietInDays", "Loaded ${days.size} day plans for plan $planId")
-                }
+            // ✅ Collect plan details reactively
+            localRepository.getDietPlanByIdFlow(planId).collect { plan ->
+                _selectedDietPlan.value = plan
+                Log.d("DietInDays", "Loaded plan: ${plan?.name}")
+            }
+        }
+
+        viewModelScope.launch {
+            // ✅ Collect day-wise entries reactively
+            localRepository.getDayPlansForDiet(planId).collect { days ->
+                _selectedDayPlans.value = days
+                Log.d("DietInDays", "Loaded ${days.size} day plans for plan $planId")
             }
         }
     }
+
 
 
 
