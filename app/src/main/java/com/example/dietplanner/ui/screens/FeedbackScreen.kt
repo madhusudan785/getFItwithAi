@@ -1,28 +1,74 @@
 package com.example.dietplanner.ui.screens
 
 import android.util.Log
+import android.view.animation.OvershootInterpolator
 import android.widget.Toast
-import androidx.compose.animation.*
-import androidx.compose.animation.core.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Easing
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.scaleIn
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.CheckCircle
+import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.MenuBook
+import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.dietplanner.com.example.dietplanner.util.SetStatusBarColor
 import com.example.dietplanner.ui.navigation.Screen
-import com.example.dietplanner.ui.theme.DietPlannerTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedbackScreen(
@@ -33,179 +79,131 @@ fun FeedbackScreen(
     onRegenerate: () -> Unit,
     onBack: () -> Unit
 ) {
-    Log.d("FeedbackScreen", "Screen loaded with planId=$planId")
+    val context = LocalContext.current
+    val scaleAnim = remember { Animatable(0f) }
+    val infiniteGlow = rememberInfiniteTransition(label = "glow")
 
-    var isVisible by remember { mutableStateOf(false) }
+    val glow by infiniteGlow.animateFloat(
+        initialValue = 0.85f,
+        targetValue = 1.15f,
+        animationSpec = infiniteRepeatable(
+            tween(2000, easing = FastOutSlowInEasing),
+            RepeatMode.Reverse
+        ),
+        label = "glowAnim"
+    )
 
     LaunchedEffect(Unit) {
-        isVisible = true
-    }
+        val OvershootEasing = Easing { OvershootInterpolator().getInterpolation(it) }
 
-    val context = LocalContext.current
+        scaleAnim.animateTo(1f, animationSpec = tween(700, easing = OvershootEasing))
+    }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Success!", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
-                    IconButton(onClick = {
-                        Log.d("FeedbackScreen", "Back clicked")
-                        onBack()
-                    }) {
-                        Icon(Icons.Default.ArrowBack, "Back")
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.Rounded.ArrowBack, contentDescription = "Back")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    containerColor = Color(0xFFB9FBC0),
+                    titleContentColor = Color.Black
                 )
             )
         }
     ) { padding ->
-        AnimatedVisibility(
-            visible = isVisible,
-            enter = fadeIn(animationSpec = tween(600)) + scaleIn(
-                initialScale = 0.9f,
-                animationSpec = tween(600)
-            )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    Brush.verticalGradient(
+                        listOf(
+                            Color(0xFFB9FBC0),
+                            Color(0xFF96E6A1),
+                            Color(0xFF6EE7B7)
+                        )
+                    )
+                )
+                .padding(padding)
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(padding)
-                    .padding(24.dp),
+                    .padding(32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                // ✅ Animated checkmark
-                val infiniteTransition = rememberInfiniteTransition(label = "checkmark")
-                val scale by infiniteTransition.animateFloat(
-                    initialValue = 1f,
-                    targetValue = 1.05f,
-                    animationSpec = infiniteRepeatable(
-                        animation = tween(1500),
-                        repeatMode = RepeatMode.Reverse
-                    ),
-                    label = "scale"
-                )
-
                 Icon(
-                    Icons.Default.CheckCircle,
+                    imageVector = Icons.Rounded.CheckCircle,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
+                    tint = Color.White,
                     modifier = Modifier
-                        .size(100.dp)
-                        .scale(scale)
+                        .size(120.dp)
+                        .scale(scaleAnim.value * glow)
                 )
-
                 Spacer(modifier = Modifier.height(24.dp))
-
                 Text(
-                    text = "Great Choice!",
-                    fontSize = 32.sp,
+                    "Great Choice!",
+                    fontSize = 34.sp,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
+                    color = Color.White
                 )
-
                 Spacer(modifier = Modifier.height(12.dp))
-
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant
-                    )
-                ) {
-                    Text(
-                        text = "Your weekly diet plan has been saved.\nWhat would you like to do next?",
-                        fontSize = 16.sp,
-                        textAlign = TextAlign.Center,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(20.dp),
-                        lineHeight = 22.sp
-                    )
-                }
-
+                Text(
+                    "Your weekly diet plan has been saved successfully.",
+                    fontSize = 18.sp,
+                    color = Color.White.copy(alpha = 0.9f)
+                )
                 Spacer(modifier = Modifier.height(32.dp))
 
-                // ✅ Proceed to Monthly Plan
-                Button(
-                    onClick = {
-                        Log.d("FeedbackScreen", "Proceed to monthly clicked")
-                        onProceedToMonthly()
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary
-                    )
-                ) {
-                    Icon(Icons.Default.Notifications, contentDescription = null)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Proceed to Monthly Plan", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
-                }
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                // ✅ Modify Preferences
-                OutlinedButton(
-                    onClick = {
-                        Log.d("FeedbackScreen", "Modify preferences clicked")
-                        onModifyPreferences()
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(16.dp)
-                ) {
-                    Icon(Icons.Default.Edit, contentDescription = null)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Modify Preferences", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
-                }
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                // ✅ Regenerate Plan
-                OutlinedButton(
-                    onClick = {
-                        Log.d("FeedbackScreen", "Regenerate clicked")
-                        onRegenerate()
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(16.dp)
-                ) {
-                    Icon(Icons.Default.Refresh, contentDescription = null)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Regenerate Weekly Plan", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
-                }
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                // ✅ View Weekly Plan
                 Button(
                     onClick = {
                         if (planId != -1L) {
-                            Log.d("FeedbackScreen", "Navigating to DietInDaysScreen with planId=$planId")
                             navController.navigate(Screen.DietInDays.createRoute(planId))
                         } else {
-                            Toast.makeText(context, "⚠️ No saved plan found!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "No plan found!", Toast.LENGTH_SHORT).show()
                         }
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp),
                     shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondary
-                    )
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00BFA6))
                 ) {
-                    Icon(Icons.Default.Info, contentDescription = null)
+                    Icon(Icons.Rounded.MenuBook, contentDescription = null)
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("View My Weekly Plan", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                    Text("View My Weekly Plan", fontSize = 17.sp)
+                }
+
+                Spacer(modifier = Modifier.height(14.dp))
+
+                OutlinedButton(
+                    onClick = onRegenerate,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Icon(Icons.Rounded.Refresh, contentDescription = null)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Regenerate Plan", fontSize = 17.sp)
+                }
+
+                Spacer(modifier = Modifier.height(14.dp))
+
+                OutlinedButton(
+                    onClick = onModifyPreferences,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Icon(Icons.Rounded.Edit, contentDescription = null)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Modify Preferences", fontSize = 17.sp)
                 }
             }
         }

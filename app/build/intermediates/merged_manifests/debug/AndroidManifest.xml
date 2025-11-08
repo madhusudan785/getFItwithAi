@@ -10,6 +10,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
 
     <permission
         android:name="com.example.dietplanner.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
@@ -24,7 +27,7 @@
         android:debuggable="true"
         android:extractNativeLibs="false"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@android:drawable/ic_popup_reminder"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@android:id/accessibilityActionContextClick"
@@ -43,6 +46,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name="com.example.dietplanner.com.example.dietplanner.reciver.ReminderReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
         <activity
             android:name="androidx.activity.ComponentActivity"
             android:exported="true" />

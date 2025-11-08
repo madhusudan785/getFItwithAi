@@ -14,153 +14,172 @@
 12    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 12-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:6:5-79
 12-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:6:22-76
-13
-14    <permission
-14-->[androidx.core:core:1.12.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\48bf16037714990cc24c67d57814b82f\transformed\core-1.12.0\AndroidManifest.xml:22:5-24:47
-15        android:name="com.example.dietplanner.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-15-->[androidx.core:core:1.12.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\48bf16037714990cc24c67d57814b82f\transformed\core-1.12.0\AndroidManifest.xml:23:9-81
-16        android:protectionLevel="signature" />
-16-->[androidx.core:core:1.12.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\48bf16037714990cc24c67d57814b82f\transformed\core-1.12.0\AndroidManifest.xml:24:9-44
-17
-18    <uses-permission android:name="com.example.dietplanner.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-18-->[androidx.core:core:1.12.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\48bf16037714990cc24c67d57814b82f\transformed\core-1.12.0\AndroidManifest.xml:26:5-97
-18-->[androidx.core:core:1.12.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\48bf16037714990cc24c67d57814b82f\transformed\core-1.12.0\AndroidManifest.xml:26:22-94
-19
-20    <application
-20-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:8:5-30:19
-21        android:allowBackup="true"
-21-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:9:9-35
-22        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-22-->[androidx.core:core:1.12.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\48bf16037714990cc24c67d57814b82f\transformed\core-1.12.0\AndroidManifest.xml:28:18-86
-23        android:dataExtractionRules="@xml/data_extraction_rules"
-23-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:10:9-65
-24        android:debuggable="true"
-25        android:extractNativeLibs="false"
-26        android:fullBackupContent="@xml/backup_rules"
-26-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:11:9-54
-27        android:icon="@android:drawable/ic_popup_reminder"
-27-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:12:9-59
-28        android:label="@string/app_name"
-28-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:13:9-41
-29        android:networkSecurityConfig="@xml/network_security_config"
-29-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:18:9-69
-30        android:roundIcon="@android:id/accessibilityActionContextClick"
-30-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:14:9-72
-31        android:supportsRtl="true"
-31-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:15:9-35
-32        android:testOnly="true"
-33        android:theme="@style/Theme.DietPlanner"
-33-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:16:9-49
-34        android:usesCleartextTraffic="true" >
-34-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:17:9-44
-35        <activity
-35-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:20:9-29:20
-36            android:name="com.example.dietplanner.MainActivity"
-36-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:21:13-41
-37            android:exported="true"
-37-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:22:13-36
-38            android:theme="@style/Theme.DietPlanner"
-38-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:23:13-53
-39            android:windowSoftInputMode="adjustResize" >
-39-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:24:13-55
-40            <intent-filter>
-40-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:25:13-28:29
-41                <action android:name="android.intent.action.MAIN" />
-41-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:26:17-69
-41-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:26:25-66
-42
-43                <category android:name="android.intent.category.LAUNCHER" />
-43-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:27:17-77
-43-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:27:27-74
-44            </intent-filter>
-45        </activity>
-46        <activity
-46-->[androidx.compose.ui:ui-test-manifest:1.6.1] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\9374d1fe62118820c14a1d6ddfd34a23\transformed\jetified-ui-test-manifest-1.6.1\AndroidManifest.xml:23:9-25:39
-47            android:name="androidx.activity.ComponentActivity"
-47-->[androidx.compose.ui:ui-test-manifest:1.6.1] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\9374d1fe62118820c14a1d6ddfd34a23\transformed\jetified-ui-test-manifest-1.6.1\AndroidManifest.xml:24:13-63
-48            android:exported="true" />
-48-->[androidx.compose.ui:ui-test-manifest:1.6.1] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\9374d1fe62118820c14a1d6ddfd34a23\transformed\jetified-ui-test-manifest-1.6.1\AndroidManifest.xml:25:13-36
-49        <activity
-49-->[androidx.compose.ui:ui-tooling-android:1.6.1] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\b85e5e95647c8ff271eea892b99ab8a1\transformed\jetified-ui-tooling-release\AndroidManifest.xml:23:9-25:39
-50            android:name="androidx.compose.ui.tooling.PreviewActivity"
-50-->[androidx.compose.ui:ui-tooling-android:1.6.1] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\b85e5e95647c8ff271eea892b99ab8a1\transformed\jetified-ui-tooling-release\AndroidManifest.xml:24:13-71
-51            android:exported="true" />
-51-->[androidx.compose.ui:ui-tooling-android:1.6.1] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\b85e5e95647c8ff271eea892b99ab8a1\transformed\jetified-ui-tooling-release\AndroidManifest.xml:25:13-36
-52
-53        <provider
-53-->[androidx.emoji2:emoji2:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\760e1d6864a9edfd505f57e4d4682dfa\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
-54            android:name="androidx.startup.InitializationProvider"
-54-->[androidx.emoji2:emoji2:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\760e1d6864a9edfd505f57e4d4682dfa\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:25:13-67
-55            android:authorities="com.example.dietplanner.androidx-startup"
-55-->[androidx.emoji2:emoji2:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\760e1d6864a9edfd505f57e4d4682dfa\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:26:13-68
-56            android:exported="false" >
-56-->[androidx.emoji2:emoji2:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\760e1d6864a9edfd505f57e4d4682dfa\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:27:13-37
-57            <meta-data
-57-->[androidx.emoji2:emoji2:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\760e1d6864a9edfd505f57e4d4682dfa\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
-58                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-58-->[androidx.emoji2:emoji2:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\760e1d6864a9edfd505f57e4d4682dfa\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:30:17-75
-59                android:value="androidx.startup" />
-59-->[androidx.emoji2:emoji2:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\760e1d6864a9edfd505f57e4d4682dfa\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:31:17-49
-60            <meta-data
-60-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\e51ed8caf59e70512881c8ab2ff3f603\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:29:13-31:52
-61                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-61-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\e51ed8caf59e70512881c8ab2ff3f603\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:30:17-78
-62                android:value="androidx.startup" />
-62-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\e51ed8caf59e70512881c8ab2ff3f603\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:31:17-49
-63            <meta-data
-63-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:29:13-31:52
-64                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-64-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:30:17-85
-65                android:value="androidx.startup" />
-65-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:31:17-49
-66        </provider>
-67
-68        <service
-68-->[androidx.room:room-runtime:2.6.1] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\60285d6d705c8be68b8077074b77c585\transformed\room-runtime-2.6.1\AndroidManifest.xml:24:9-28:63
-69            android:name="androidx.room.MultiInstanceInvalidationService"
-69-->[androidx.room:room-runtime:2.6.1] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\60285d6d705c8be68b8077074b77c585\transformed\room-runtime-2.6.1\AndroidManifest.xml:25:13-74
-70            android:directBootAware="true"
-70-->[androidx.room:room-runtime:2.6.1] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\60285d6d705c8be68b8077074b77c585\transformed\room-runtime-2.6.1\AndroidManifest.xml:26:13-43
-71            android:exported="false" />
-71-->[androidx.room:room-runtime:2.6.1] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\60285d6d705c8be68b8077074b77c585\transformed\room-runtime-2.6.1\AndroidManifest.xml:27:13-37
-72
-73        <receiver
-73-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:34:9-52:20
-74            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-74-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:35:13-76
-75            android:directBootAware="false"
-75-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:36:13-44
-76            android:enabled="true"
-76-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:37:13-35
-77            android:exported="true"
-77-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:38:13-36
-78            android:permission="android.permission.DUMP" >
-78-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:39:13-57
-79            <intent-filter>
-79-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:40:13-42:29
-80                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-80-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:41:17-91
-80-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:41:25-88
-81            </intent-filter>
-82            <intent-filter>
-82-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:43:13-45:29
-83                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-83-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:44:17-85
-83-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:44:25-82
-84            </intent-filter>
-85            <intent-filter>
-85-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:46:13-48:29
-86                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-86-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:47:17-88
-86-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:47:25-85
-87            </intent-filter>
+13    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+13-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:7:5-79
+13-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:7:22-76
+14    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+14-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:8:5-77
+14-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:8:22-74
+15    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+15-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:9:5-74
+15-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:9:22-71
+16
+17    <permission
+17-->[androidx.core:core:1.12.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\48bf16037714990cc24c67d57814b82f\transformed\core-1.12.0\AndroidManifest.xml:22:5-24:47
+18        android:name="com.example.dietplanner.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+18-->[androidx.core:core:1.12.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\48bf16037714990cc24c67d57814b82f\transformed\core-1.12.0\AndroidManifest.xml:23:9-81
+19        android:protectionLevel="signature" />
+19-->[androidx.core:core:1.12.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\48bf16037714990cc24c67d57814b82f\transformed\core-1.12.0\AndroidManifest.xml:24:9-44
+20
+21    <uses-permission android:name="com.example.dietplanner.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+21-->[androidx.core:core:1.12.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\48bf16037714990cc24c67d57814b82f\transformed\core-1.12.0\AndroidManifest.xml:26:5-97
+21-->[androidx.core:core:1.12.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\48bf16037714990cc24c67d57814b82f\transformed\core-1.12.0\AndroidManifest.xml:26:22-94
+22
+23    <application
+23-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:11:5-37:19
+24        android:allowBackup="true"
+24-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:12:9-35
+25        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+25-->[androidx.core:core:1.12.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\48bf16037714990cc24c67d57814b82f\transformed\core-1.12.0\AndroidManifest.xml:28:18-86
+26        android:dataExtractionRules="@xml/data_extraction_rules"
+26-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:13:9-65
+27        android:debuggable="true"
+28        android:extractNativeLibs="false"
+29        android:fullBackupContent="@xml/backup_rules"
+29-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:14:9-54
+30        android:icon="@drawable/logo"
+30-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:15:9-38
+31        android:label="@string/app_name"
+31-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:16:9-41
+32        android:networkSecurityConfig="@xml/network_security_config"
+32-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:21:9-69
+33        android:roundIcon="@android:id/accessibilityActionContextClick"
+33-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:17:9-72
+34        android:supportsRtl="true"
+34-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:18:9-35
+35        android:testOnly="true"
+36        android:theme="@style/Theme.DietPlanner"
+36-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:19:9-49
+37        android:usesCleartextTraffic="true" >
+37-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:20:9-44
+38        <activity
+38-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:23:9-32:20
+39            android:name="com.example.dietplanner.MainActivity"
+39-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:24:13-41
+40            android:exported="true"
+40-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:25:13-36
+41            android:theme="@style/Theme.DietPlanner"
+41-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:26:13-53
+42            android:windowSoftInputMode="adjustResize" >
+42-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:27:13-55
+43            <intent-filter>
+43-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:28:13-31:29
+44                <action android:name="android.intent.action.MAIN" />
+44-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:29:17-69
+44-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:29:25-66
+45
+46                <category android:name="android.intent.category.LAUNCHER" />
+46-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:30:17-77
+46-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:30:27-74
+47            </intent-filter>
+48        </activity>
+49
+50        <receiver
+50-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:33:9-36:40
+51            android:name="com.example.dietplanner.com.example.dietplanner.reciver.ReminderReceiver"
+51-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:34:13-77
+52            android:enabled="true"
+52-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:35:13-35
+53            android:exported="false" />
+53-->D:\assignment\getFItwithAi\app\src\main\AndroidManifest.xml:36:13-37
+54
+55        <activity
+55-->[androidx.compose.ui:ui-test-manifest:1.6.1] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\9374d1fe62118820c14a1d6ddfd34a23\transformed\jetified-ui-test-manifest-1.6.1\AndroidManifest.xml:23:9-25:39
+56            android:name="androidx.activity.ComponentActivity"
+56-->[androidx.compose.ui:ui-test-manifest:1.6.1] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\9374d1fe62118820c14a1d6ddfd34a23\transformed\jetified-ui-test-manifest-1.6.1\AndroidManifest.xml:24:13-63
+57            android:exported="true" />
+57-->[androidx.compose.ui:ui-test-manifest:1.6.1] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\9374d1fe62118820c14a1d6ddfd34a23\transformed\jetified-ui-test-manifest-1.6.1\AndroidManifest.xml:25:13-36
+58        <activity
+58-->[androidx.compose.ui:ui-tooling-android:1.6.1] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\b85e5e95647c8ff271eea892b99ab8a1\transformed\jetified-ui-tooling-release\AndroidManifest.xml:23:9-25:39
+59            android:name="androidx.compose.ui.tooling.PreviewActivity"
+59-->[androidx.compose.ui:ui-tooling-android:1.6.1] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\b85e5e95647c8ff271eea892b99ab8a1\transformed\jetified-ui-tooling-release\AndroidManifest.xml:24:13-71
+60            android:exported="true" />
+60-->[androidx.compose.ui:ui-tooling-android:1.6.1] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\b85e5e95647c8ff271eea892b99ab8a1\transformed\jetified-ui-tooling-release\AndroidManifest.xml:25:13-36
+61
+62        <provider
+62-->[androidx.emoji2:emoji2:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\760e1d6864a9edfd505f57e4d4682dfa\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
+63            android:name="androidx.startup.InitializationProvider"
+63-->[androidx.emoji2:emoji2:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\760e1d6864a9edfd505f57e4d4682dfa\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:25:13-67
+64            android:authorities="com.example.dietplanner.androidx-startup"
+64-->[androidx.emoji2:emoji2:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\760e1d6864a9edfd505f57e4d4682dfa\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:26:13-68
+65            android:exported="false" >
+65-->[androidx.emoji2:emoji2:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\760e1d6864a9edfd505f57e4d4682dfa\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:27:13-37
+66            <meta-data
+66-->[androidx.emoji2:emoji2:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\760e1d6864a9edfd505f57e4d4682dfa\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
+67                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+67-->[androidx.emoji2:emoji2:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\760e1d6864a9edfd505f57e4d4682dfa\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:30:17-75
+68                android:value="androidx.startup" />
+68-->[androidx.emoji2:emoji2:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\760e1d6864a9edfd505f57e4d4682dfa\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:31:17-49
+69            <meta-data
+69-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\e51ed8caf59e70512881c8ab2ff3f603\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:29:13-31:52
+70                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+70-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\e51ed8caf59e70512881c8ab2ff3f603\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:30:17-78
+71                android:value="androidx.startup" />
+71-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\e51ed8caf59e70512881c8ab2ff3f603\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:31:17-49
+72            <meta-data
+72-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:29:13-31:52
+73                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+73-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:30:17-85
+74                android:value="androidx.startup" />
+74-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:31:17-49
+75        </provider>
+76
+77        <service
+77-->[androidx.room:room-runtime:2.6.1] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\60285d6d705c8be68b8077074b77c585\transformed\room-runtime-2.6.1\AndroidManifest.xml:24:9-28:63
+78            android:name="androidx.room.MultiInstanceInvalidationService"
+78-->[androidx.room:room-runtime:2.6.1] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\60285d6d705c8be68b8077074b77c585\transformed\room-runtime-2.6.1\AndroidManifest.xml:25:13-74
+79            android:directBootAware="true"
+79-->[androidx.room:room-runtime:2.6.1] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\60285d6d705c8be68b8077074b77c585\transformed\room-runtime-2.6.1\AndroidManifest.xml:26:13-43
+80            android:exported="false" />
+80-->[androidx.room:room-runtime:2.6.1] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\60285d6d705c8be68b8077074b77c585\transformed\room-runtime-2.6.1\AndroidManifest.xml:27:13-37
+81
+82        <receiver
+82-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:34:9-52:20
+83            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+83-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:35:13-76
+84            android:directBootAware="false"
+84-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:36:13-44
+85            android:enabled="true"
+85-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:37:13-35
+86            android:exported="true"
+86-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:38:13-36
+87            android:permission="android.permission.DUMP" >
+87-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:39:13-57
 88            <intent-filter>
-88-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:49:13-51:29
-89                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-89-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:50:17-95
-89-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:50:25-92
+88-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:40:13-42:29
+89                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+89-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:41:17-91
+89-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:41:25-88
 90            </intent-filter>
-91        </receiver>
-92    </application>
-93
-94</manifest>
+91            <intent-filter>
+91-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:43:13-45:29
+92                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+92-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:44:17-85
+92-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:44:25-82
+93            </intent-filter>
+94            <intent-filter>
+94-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:46:13-48:29
+95                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+95-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:47:17-88
+95-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:47:25-85
+96            </intent-filter>
+97            <intent-filter>
+97-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:49:13-51:29
+98                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+98-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:50:17-95
+98-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\gufac\.gradle\wrapper\caches\8.9\transforms\5ecde2a1964c232caeb178da5c075911\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:50:25-92
+99            </intent-filter>
+100        </receiver>
+101    </application>
+102
+103</manifest>

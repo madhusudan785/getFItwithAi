@@ -1,5 +1,7 @@
 R_DEF: Internal format may change without notice
 local
+drawable bell_01
+drawable logo
 string app_name
 style Theme.DietPlanner
 xml backup_rules

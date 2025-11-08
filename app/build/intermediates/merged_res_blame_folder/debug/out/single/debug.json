@@ -1,14 +1,22 @@
 [
     {
-        "merged": "com.example.dietplanner.app-merged_res-57:/xml_backup_rules.xml.flat",
-        "source": "com.example.dietplanner.app-main-59:/xml/backup_rules.xml"
+        "merged": "C:\\Users\\gufac\\.gradle\\wrapper\\daemon\\8.9\\com.example.dietplanner.app-merged_res-57:\\xml_network_security_config.xml.flat",
+        "source": "C:\\Users\\gufac\\.gradle\\wrapper\\daemon\\8.9\\com.example.dietplanner.app-main-59:\\xml\\network_security_config.xml"
     },
     {
-        "merged": "com.example.dietplanner.app-merged_res-57:/xml_network_security_config.xml.flat",
-        "source": "com.example.dietplanner.app-main-59:/xml/network_security_config.xml"
+        "merged": "C:\\Users\\gufac\\.gradle\\wrapper\\daemon\\8.9\\com.example.dietplanner.app-merged_res-57:\\xml_data_extraction_rules.xml.flat",
+        "source": "C:\\Users\\gufac\\.gradle\\wrapper\\daemon\\8.9\\com.example.dietplanner.app-main-59:\\xml\\data_extraction_rules.xml"
     },
     {
-        "merged": "com.example.dietplanner.app-merged_res-57:/xml_data_extraction_rules.xml.flat",
-        "source": "com.example.dietplanner.app-main-59:/xml/data_extraction_rules.xml"
+        "merged": "com.example.dietplanner.app-merged_res-57:/drawable_bell_01.xml.flat",
+        "source": "com.example.dietplanner.app-main-59:/drawable/bell_01.xml"
+    },
+    {
+        "merged": "C:\\Users\\gufac\\.gradle\\wrapper\\daemon\\8.9\\com.example.dietplanner.app-merged_res-57:\\drawable_logo.png.flat",
+        "source": "C:\\Users\\gufac\\.gradle\\wrapper\\daemon\\8.9\\com.example.dietplanner.app-main-59:\\drawable\\logo.png"
+    },
+    {
+        "merged": "C:\\Users\\gufac\\.gradle\\wrapper\\daemon\\8.9\\com.example.dietplanner.app-merged_res-57:\\xml_backup_rules.xml.flat",
+        "source": "C:\\Users\\gufac\\.gradle\\wrapper\\daemon\\8.9\\com.example.dietplanner.app-main-59:\\xml\\backup_rules.xml"
     }
 ]

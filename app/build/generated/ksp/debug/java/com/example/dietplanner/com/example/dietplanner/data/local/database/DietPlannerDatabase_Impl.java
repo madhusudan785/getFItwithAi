@@ -28,22 +28,26 @@ import javax.annotation.processing.Generated;
 public final class DietPlannerDatabase_Impl extends DietPlannerDatabase {
   private volatile DietPlanDao _dietPlanDao;
 
+  private volatile ReminderDao _reminderDao;
+
   @Override
   @NonNull
   protected SupportSQLiteOpenHelper createOpenHelper(@NonNull final DatabaseConfiguration config) {
-    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(1) {
+    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(2) {
       @Override
       public void createAllTables(@NonNull final SupportSQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS `diet_plans` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `content` TEXT NOT NULL, `cleanedContent` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, `planType` TEXT NOT NULL, `userHeight` REAL NOT NULL, `userWeight` REAL NOT NULL, `userAge` INTEGER NOT NULL, `userGender` TEXT NOT NULL, `isFavorite` INTEGER NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS `day_plans` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `dietPlanId` INTEGER NOT NULL, `dayName` TEXT NOT NULL, `dayNumber` INTEGER NOT NULL, `breakfast` TEXT NOT NULL, `lunch` TEXT NOT NULL, `dinner` TEXT NOT NULL, `snacks` TEXT NOT NULL, `exercise` TEXT NOT NULL, `hydration` TEXT NOT NULL, `notes` TEXT NOT NULL)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `reminders` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `time` TEXT NOT NULL, `emoji` TEXT NOT NULL, `type` TEXT NOT NULL, `isEnabled` INTEGER NOT NULL, `daysOfWeek` TEXT NOT NULL, `createdAt` INTEGER NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '33309cce78f552afc7d246bb5c249cd0')");
+        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7095cd072650a22111325a0c53932ee8')");
       }
 
       @Override
       public void dropAllTables(@NonNull final SupportSQLiteDatabase db) {
         db.execSQL("DROP TABLE IF EXISTS `diet_plans`");
         db.execSQL("DROP TABLE IF EXISTS `day_plans`");
+        db.execSQL("DROP TABLE IF EXISTS `reminders`");
         final List<? extends RoomDatabase.Callback> _callbacks = mCallbacks;
         if (_callbacks != null) {
           for (RoomDatabase.Callback _callback : _callbacks) {
@@ -129,9 +133,27 @@ public final class DietPlannerDatabase_Impl extends DietPlannerDatabase {
                   + " Expected:\n" + _infoDayPlans + "\n"
                   + " Found:\n" + _existingDayPlans);
         }
+        final HashMap<String, TableInfo.Column> _columnsReminders = new HashMap<String, TableInfo.Column>(8);
+        _columnsReminders.put("id", new TableInfo.Column("id", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsReminders.put("title", new TableInfo.Column("title", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsReminders.put("time", new TableInfo.Column("time", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsReminders.put("emoji", new TableInfo.Column("emoji", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsReminders.put("type", new TableInfo.Column("type", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsReminders.put("isEnabled", new TableInfo.Column("isEnabled", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsReminders.put("daysOfWeek", new TableInfo.Column("daysOfWeek", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsReminders.put("createdAt", new TableInfo.Column("createdAt", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        final HashSet<TableInfo.ForeignKey> _foreignKeysReminders = new HashSet<TableInfo.ForeignKey>(0);
+        final HashSet<TableInfo.Index> _indicesReminders = new HashSet<TableInfo.Index>(0);
+        final TableInfo _infoReminders = new TableInfo("reminders", _columnsReminders, _foreignKeysReminders, _indicesReminders);
+        final TableInfo _existingReminders = TableInfo.read(db, "reminders");
+        if (!_infoReminders.equals(_existingReminders)) {
+          return new RoomOpenHelper.ValidationResult(false, "reminders(com.example.dietplanner.com.example.dietplanner.data.model.ReminderEntity).\n"
+                  + " Expected:\n" + _infoReminders + "\n"
+                  + " Found:\n" + _existingReminders);
+        }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "33309cce78f552afc7d246bb5c249cd0", "61d5a7e7f092910cef705c5aec2c2d1f");
+    }, "7095cd072650a22111325a0c53932ee8", "168c5f9e008794b36b57e7cf23bf51f4");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(config.context).name(config.name).callback(_openCallback).build();
     final SupportSQLiteOpenHelper _helper = config.sqliteOpenHelperFactory.create(_sqliteConfig);
     return _helper;
@@ -142,7 +164,7 @@ public final class DietPlannerDatabase_Impl extends DietPlannerDatabase {
   protected InvalidationTracker createInvalidationTracker() {
     final HashMap<String, String> _shadowTablesMap = new HashMap<String, String>(0);
     final HashMap<String, Set<String>> _viewTables = new HashMap<String, Set<String>>(0);
-    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "diet_plans","day_plans");
+    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "diet_plans","day_plans","reminders");
   }
 
   @Override
@@ -153,6 +175,7 @@ public final class DietPlannerDatabase_Impl extends DietPlannerDatabase {
       super.beginTransaction();
       _db.execSQL("DELETE FROM `diet_plans`");
       _db.execSQL("DELETE FROM `day_plans`");
+      _db.execSQL("DELETE FROM `reminders`");
       super.setTransactionSuccessful();
     } finally {
       super.endTransaction();
@@ -168,6 +191,7 @@ public final class DietPlannerDatabase_Impl extends DietPlannerDatabase {
   protected Map<Class<?>, List<Class<?>>> getRequiredTypeConverters() {
     final HashMap<Class<?>, List<Class<?>>> _typeConvertersMap = new HashMap<Class<?>, List<Class<?>>>();
     _typeConvertersMap.put(DietPlanDao.class, DietPlanDao_Impl.getRequiredConverters());
+    _typeConvertersMap.put(ReminderDao.class, ReminderDao_Impl.getRequiredConverters());
     return _typeConvertersMap;
   }
 
@@ -196,6 +220,20 @@ public final class DietPlannerDatabase_Impl extends DietPlannerDatabase {
           _dietPlanDao = new DietPlanDao_Impl(this);
         }
         return _dietPlanDao;
+      }
+    }
+  }
+
+  @Override
+  public ReminderDao reminderDao() {
+    if (_reminderDao != null) {
+      return _reminderDao;
+    } else {
+      synchronized(this) {
+        if(_reminderDao == null) {
+          _reminderDao = new ReminderDao_Impl(this);
+        }
+        return _reminderDao;
       }
     }
   }
