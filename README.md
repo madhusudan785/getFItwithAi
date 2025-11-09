@@ -48,9 +48,7 @@ It leverages **AI-powered diet recommendations**, **personalized reminders**, an
 
 | Home                 | Diet Plan | Reminders |
 |----------------------|------------|------------|
-| ![Home_screen_with_plans.jpg](assets%2FHome_screen_with_plans.jpg)
-![Home_screen_With out_plans.jpg](assets%2FHome_screen_With%20out_plans.jpg)| ![Diet_plan_screen.jpg](assets%2FDiet_plan_screen.jpg)
-![detail_diet_plan.jpg](assets%2Fdetail_diet_plan.jpg) | ![remainder_screen.jpg](assets%2Fremainder_screen.jpg)|
+| ![Home_screen_with_plans.jpg](assets%2FHome_screen_with_plans.jpg),![Home_screen_With out_plans.jpg](assets%2FHome_screen_With%20out_plans.jpg)| !!!!![Diet_plan_screen.jpg](assets%2FDiet_plan_screen.jpg),![detail_diet_plan.jpg](assets%2Fdetail_diet_plan.jpg) | ![remainder_screen.jpg](assets%2Fremainder_screen.jpg)|
 
 
 ### ⚙️ Setup Instructions
@@ -67,3 +65,7 @@ git clone https://github.com/madhusudan785/getFitwithAi.git
 
 # 4️⃣ (Optional) Run backend server (if connected)
 ./gradlew bootRun
+
+
+APK of this app
+https://drive.google.com/drive/folders/1pfVYR__Xk9TSe4uU91U8ZcaLyerBXiUy?usp=drive_link
