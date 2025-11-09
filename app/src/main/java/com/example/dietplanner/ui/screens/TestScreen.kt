@@ -31,8 +31,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.dietplanner.data.model.DietPlanState
-import com.example.dietplanner.ui.screens.DietPlanScreen
 import com.example.dietplanner.ui.theme.DietPlannerTheme
 
 

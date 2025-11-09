@@ -8,18 +8,29 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.media.AudioAttributes
 import android.net.Uri
 import android.os.Build
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.dietplanner.MainActivity
 import com.example.dietplanner.R
+import com.example.dietplanner.com.example.dietplanner.data.model.Reminder
+import com.example.dietplanner.com.example.dietplanner.data.model.ReminderType
+import com.example.dietplanner.ui.theme.DietPlannerTheme
 
 class ReminderReceiver : BroadcastReceiver() {
 
@@ -96,6 +107,45 @@ class ReminderReceiver : BroadcastReceiver() {
             }
         }
 
+        fun showSetupConfirmation(context: Context) {
+                val channelId = "diet_default"
+                ensureChannel(context, "DEFAULT")
+
+                val intent = Intent(context, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+
+                val pendingIntent = PendingIntent.getActivity(
+                    context,
+                    9999, // unique dummy ID
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+
+                val soundUri = Uri.parse("android.resource://${context.packageName}/raw/diet_reminder")
+
+                val builder = NotificationCompat.Builder(context, channelId)
+                    .setSmallIcon(R.drawable.bell_01)
+                    .setContentTitle("🎯 Reminder Set Successfully")
+                    .setContentText("Your reminders are now active — stay consistent and healthy! 🥗")
+                    .setAutoCancel(true)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setCategory(NotificationCompat.CATEGORY_STATUS)
+                    .setContentIntent(pendingIntent)
+                    .setVibrate(longArrayOf(0, 300, 200, 300))
+                    .setSound(soundUri)
+
+                val nm = NotificationManagerCompat.from(context)
+                if (ActivityCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    nm.notify(9999, builder.build())
+                }
+            }
+
+
     }
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -159,6 +209,11 @@ class ReminderReceiver : BroadcastReceiver() {
 
         nm.notify(reminderId.toInt(), builder.build())
     }
+
+
 }
+
+
+
 
 

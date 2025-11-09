@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.TimePickerDialog
 import android.os.Build
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
@@ -63,6 +64,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dietplanner.com.example.dietplanner.data.model.Reminder
 import com.example.dietplanner.com.example.dietplanner.data.model.ReminderType
+import com.example.dietplanner.com.example.dietplanner.reciver.ReminderReceiver
 import com.example.dietplanner.com.example.dietplanner.ui.viewmodel.ReminderViewModel
 import com.example.dietplanner.ui.theme.DietPlannerTheme
 import java.util.Calendar
@@ -302,7 +304,6 @@ private fun StatItem(label: String, value: String, emoji: String) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ReminderCard(
     reminder: Reminder,
@@ -312,9 +313,14 @@ private fun ReminderCard(
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
     var showEditDialog by remember { mutableStateOf(false) }
+    var remindersEnabled by remember { mutableStateOf(reminder.isEnabled) }
+
+
+    val context = LocalContext.current
 
     Card(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .clickable { showEditDialog = true },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
@@ -380,8 +386,15 @@ private fun ReminderCard(
                 }
 
                 Switch(
-                    checked = reminder.isEnabled,
-                    onCheckedChange = { onToggle() }
+                    checked = remindersEnabled,
+                    onCheckedChange = { isChecked ->
+                        remindersEnabled = isChecked
+                        if (isChecked) {
+                            ReminderReceiver.showSetupConfirmation(context)
+                        } else {
+                            Toast.makeText(context, "Reminders turned off", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 )
             }
         }
@@ -578,7 +591,45 @@ private fun AddReminderDialog(
 @Preview(showBackground = true)
 @Composable
 fun ReminderScreenPreview() {
+    val fakeReminders = listOf(
+        Reminder(
+            id = 1,
+            title = "Morning Water",
+            time = "07:00",
+            emoji = "💧",
+            type = ReminderType.HYDRATION,
+            isEnabled = true
+        ),
+        Reminder(
+            id = 2,
+            title = "Lunch Time",
+            time = "13:00",
+            emoji = "🍱",
+            type = ReminderType.MEAL,
+            isEnabled = false
+        )
+    )
+
     DietPlannerTheme {
-        ReminderScreen(onBack = {})
+        ReminderScreenContentPreview(fakeReminders)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ReminderScreenContentPreview(reminders: List<Reminder>) {
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("Daily Reminders") }) }
+    ) { padding ->
+        LazyColumn(modifier = Modifier.padding(padding)) {
+            items(reminders) { reminder ->
+                ReminderCard(
+                    reminder = reminder,
+                    onToggle = {},
+                    onDelete = {},
+                    onEdit = { TODO() }
+                )
+            }
+        }
     }
 }
