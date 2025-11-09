@@ -168,8 +168,14 @@ fun ReminderScreen(
                     ReminderCard(
                         reminder = reminder,
                         onToggle = { viewModel.toggleReminder(reminder) },
-                        onDelete = { viewModel.deleteReminder(reminder) },
-                        onEdit = { viewModel.updateReminder(it) }
+                        onDelete = { viewModel.deleteReminder(
+                            reminder,
+                            context = context
+                        ) },
+                        onEdit = { viewModel.updateReminder(
+                            it,
+                            context = context
+                        ) }
                     )
                 }
             }
@@ -183,7 +189,10 @@ fun ReminderScreen(
         AddReminderDialog(
             onDismiss = { showAddDialog = false },
             onAdd = { reminder ->
-                viewModel.addReminder(reminder)
+                viewModel.addReminder(
+                    reminder,
+                    context = context
+                )
                 showAddDialog = false
             }
         )
@@ -480,7 +489,7 @@ private fun AddReminderDialog(
         onDismissRequest = onDismiss,
         title = {
             Text(
-                if (initialReminder == null) "Add New Reminder" else "Edit Reminder", // 👈 title changes dynamically
+                if (initialReminder == null) "Add New Reminder" else "Edit Reminder",
                 style = MaterialTheme.typography.titleLarge
             )
         },
@@ -544,21 +553,19 @@ private fun AddReminderDialog(
             Button(
                 onClick = {
                     if (title.isNotBlank()) {
-                        onAdd(
-                            Reminder(
-                                id = initialReminder?.id ?: 0L, // keep same ID for edit
-                                title = title,
-                                time = time,
-                                emoji = emoji,
-                                type = selectedType,
-                                isEnabled = true
-                            )
+                        val newReminder = Reminder(
+                            title = title,
+                            time = time,
+                            emoji = emoji,
+                            type = selectedType,
+                            isEnabled = true
                         )
+                        onAdd(newReminder)
                     }
                 },
                 enabled = title.isNotBlank()
-            ) {
-                Text(if (initialReminder == null) "Add" else "Save") // 👈 dynamic button label
+            ){
+                Text(if (initialReminder == null) "Add" else "Save")
             }
         },
         dismissButton = {

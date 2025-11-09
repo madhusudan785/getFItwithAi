@@ -86,9 +86,6 @@ fun DietPlannerApp(
     val userProfile by viewModel.userProfile.collectAsState()
     val allDietPlans by viewModel.allDietPlans.collectAsState()
 
-    val selectedDietPlan by viewModel.selectedDietPlan.collectAsState()
-    val selectedDayPlans by viewModel.selectedDayPlans.collectAsState()
-
     val isFirstLaunchState = preferencesManager.isFirstLaunch.collectAsState(initial = null)
 
     isFirstLaunchState.value?.let { firstLaunchDone ->

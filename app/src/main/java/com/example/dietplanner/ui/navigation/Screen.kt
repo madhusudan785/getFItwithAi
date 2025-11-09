@@ -1,5 +1,7 @@
 package com.example.dietplanner.ui.navigation
 
+import com.example.dietplanner.com.example.dietplanner.ui.screens.TestScreen
+
 sealed class Screen(val route: String) {
     object Home : Screen("home")
     object Welcome : Screen("welcome")

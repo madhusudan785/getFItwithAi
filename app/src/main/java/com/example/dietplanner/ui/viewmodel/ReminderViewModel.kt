@@ -1,6 +1,7 @@
 package com.example.dietplanner.com.example.dietplanner.ui.viewmodel
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +9,7 @@ import com.example.dietplanner.com.example.dietplanner.data.local.database.DietP
 import com.example.dietplanner.com.example.dietplanner.data.model.DefaultReminders
 import com.example.dietplanner.com.example.dietplanner.data.model.Reminder
 import com.example.dietplanner.com.example.dietplanner.data.repository.ReminderRepository
+import com.example.dietplanner.com.example.dietplanner.util.ReminderScheduler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -39,8 +41,13 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
 
 
     init {
-        Log.d(TAG, "ReminderViewModel initialized")
-        loadReminders()
+        // Auto-collect all reminders from DB so UI updates instantly
+        viewModelScope.launch {
+            repository.getAllReminders().collect { list ->
+                _reminders.value = list
+                Log.d(TAG, "📅 Collected ${list.size} reminders")
+            }
+        }
     }
 
     /**
@@ -64,49 +71,55 @@ class ReminderViewModel(application: Application) : AndroidViewModel(application
     }
 
 
-    /**
-     * Add a new reminder
-     */
-    fun addReminder(reminder: Reminder) {
+    // ✅ Add Reminder
+    fun addReminder(reminder: Reminder, context: Context) {
         viewModelScope.launch {
             try {
-                Log.d(TAG, "Adding reminder: ${reminder.title}")
+                _isLoading.value = true
                 repository.addReminder(reminder)
-                Log.i(TAG, "✅ Reminder added successfully: ${reminder.title}")
+
+                ReminderScheduler.scheduleReminder(context,reminder)
+
+                Log.i(TAG, "✅ Reminder added & scheduled at ${reminder.time}")
             } catch (e: Exception) {
-                Log.e(TAG, "❌ Error adding reminder", e)
+                Log.e(TAG, "❌ Failed to add reminder", e)
                 _error.value = "Failed to add reminder: ${e.message}"
+            } finally {
+                _isLoading.value = false
             }
         }
     }
 
-    /**
-     * Update an existing reminder
-     */
-    fun updateReminder(reminder: Reminder) {
+    // ✅ Update Reminder (reschedule safely)
+    fun updateReminder(reminder: Reminder, context: Context) {
         viewModelScope.launch {
             try {
-                Log.d(TAG, "Updating reminder: ${reminder.title}")
+                _isLoading.value = true
                 repository.updateReminder(reminder)
-                Log.i(TAG, "✅ Reminder updated successfully")
+
+                // Cancel old schedule first, then reschedule
+                ReminderScheduler.cancelReminder(context, reminder.id)
+                ReminderScheduler.scheduleReminder(context, reminder)
+
+                Log.i(TAG, "🔁 Reminder updated & rescheduled at ${reminder.time}")
             } catch (e: Exception) {
-                Log.e(TAG, "❌ Error updating reminder", e)
+                Log.e(TAG, "❌ Failed to update reminder", e)
                 _error.value = "Failed to update reminder: ${e.message}"
+            } finally {
+                _isLoading.value = false
             }
         }
     }
 
-    /**
-     * Delete a reminder
-     */
-    fun deleteReminder(reminder: Reminder) {
+    // ✅ Delete Reminder
+    fun deleteReminder(reminder: Reminder, context: Context) {
         viewModelScope.launch {
             try {
-                Log.d(TAG, "Deleting reminder: ${reminder.title}")
                 repository.deleteReminder(reminder)
-                Log.i(TAG, "✅ Reminder deleted successfully")
+                ReminderScheduler.cancelReminder(context, reminder.id)
+                Log.d(TAG, "🗑️ Reminder deleted (${reminder.title})")
             } catch (e: Exception) {
-                Log.e(TAG, "❌ Error deleting reminder", e)
+                Log.e(TAG, "❌ Failed to delete reminder", e)
                 _error.value = "Failed to delete reminder: ${e.message}"
             }
         }

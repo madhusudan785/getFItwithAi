@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
     <permission
         android:name="com.example.dietplanner.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
@@ -50,7 +51,8 @@
         <receiver
             android:name="com.example.dietplanner.com.example.dietplanner.reciver.ReminderReceiver"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="true"
+            android:permission="TODO" />
 
         <activity
             android:name="androidx.activity.ComponentActivity"
